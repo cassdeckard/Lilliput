@@ -108,4 +108,23 @@ class LilliputTests: XCTestCase {
         XCTAssertEqual(capturedInt!, 42)
         XCTAssertEqual(result, "foo")
     }
+
+    func testThatWeCanMockVoidFunctionsWithTwoParameters() {
+        func realFunction(String, Int) -> () { }
+        let mockFunction = mock(realFunction)
+
+        var capturedString : String?
+        var capturedInt : Int?
+        when(mockFunction) {
+            (stringArg: String, intArg: Int) in
+            capturedString = stringArg
+            capturedInt = intArg
+        }
+
+        (*mockFunction)("YO", -23)
+
+        verifyAtLeastOnce(mockFunction)
+        XCTAssertEqual(capturedString!, "YO")
+        XCTAssertEqual(capturedInt!, -23)
+    }
 }
