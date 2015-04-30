@@ -85,8 +85,8 @@ prefix func *<Input1, Input2, Output>(mockFunc: _MockFunc<(Input1, Input2), Outp
     return mockFunc.call
 }
 
-prefix func *<Input>(mockFunc: _MockFunc<Input, Void>) -> (_MockVoidFunc<Input>.MockedFunc) {
-    return (mockFunc as! _MockVoidFunc<Input>).call
+prefix func *<Input>(mockFunc: _MockVoidFunc<Input>) -> (_MockVoidFunc<Input>.MockedFunc) {
+    return mockFunc.call
 }
 prefix func *<Input1, Input2>(mockFunc: _MockVoidFunc<(Input1, Input2)>) -> ((Input1, Input2) -> Void) {
     return mockFunc.call
