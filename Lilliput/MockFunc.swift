@@ -71,7 +71,7 @@ extension XCTestCase {
         return _MockFunc<Input, Output>()
     }
 
-    func mock<Input>(realFunc: (Input) -> ()) -> _MockFunc<Input, Void> {
+    func mock<Input>(realFunc: (Input) -> ()) -> _MockVoidFunc<Input> {
         return _MockVoidFunc<Input>()
     }
 }
