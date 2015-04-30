@@ -20,3 +20,8 @@ class MockFunc<Input, Output> {
 func when<Input, Output>(mockFunc : MockFunc<Input, Output>, callback: MockFunc<Input, Output>.Callback) -> () {
     mockFunc.when(callback)
 }
+
+prefix operator * {}
+prefix func *<Input, Output>(mockFunc: MockFunc<Input, Output>) -> (MockFunc<Input, Output>.MockedFunc) {
+    return mockFunc.call
+}
