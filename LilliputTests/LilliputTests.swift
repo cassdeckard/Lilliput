@@ -17,7 +17,7 @@ class LilliputTests: XCTestCase {
     }
 
     func testBasicFunctionMocking() {
-        let mockStringFilter = MockFunc<String, String>()
+        let mockStringFilter = _MockFunc<String, String>()
         var capturedArg : String?
         let expectedResult = "result"
         when(mockStringFilter) {
@@ -35,7 +35,7 @@ class LilliputTests: XCTestCase {
     }
 
     func testThatWeCanInjectTheMock() {
-        let mockStringFilter = MockFunc<String, String>()
+        let mockStringFilter = _MockFunc<String, String>()
         var capturedArg : String?
         let expectedResult = "aResult"
         when(mockStringFilter) {
@@ -59,7 +59,7 @@ class LilliputTests: XCTestCase {
 
         let mockFunction = mock(realFunction)
 
-        XCTAssertTrue(mockFunction is MockFunc<String, String>)
+        XCTAssertTrue(mockFunction is _MockFunc<String, String>)
     }
 
     func testThatWeCanMockVoidFunctions_andCallThemWithoutNeedingToCallWhenFirst() {

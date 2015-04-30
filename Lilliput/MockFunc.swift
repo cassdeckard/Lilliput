@@ -1,7 +1,23 @@
 import Foundation
 import XCTest
 
-class MockFunc<Input, Output> {
+protocol MockFunc {
+    typealias Input
+    typealias Output
+    typealias MockedFunc
+    typealias Callback
+
+    var capturedArguments: [(Input)] { get set }
+    var callback: Callback! { get set }
+    var timesCalled: Int { get }
+
+    func call(input: Input) -> (Output)
+    func call<Input1, Input2>(input1: Input1, _ input2: Input2) -> Output
+
+    func when(callback: Callback)
+}
+
+class _MockFunc<Input, Output> : MockFunc {
     typealias MockedFunc = (Input) -> (Output)
     typealias Callback = (Input) -> (Output)
 
@@ -29,7 +45,7 @@ class MockFunc<Input, Output> {
     }
 }
 
-class MockVoidFunc<Input> : MockFunc<Input, Void> {
+class _MockVoidFunc<Input> : _MockFunc<Input, Void> {
     override func call(input: Input) -> () {
         capturedArguments.append(input)
         if let callback = self.callback {
@@ -39,7 +55,7 @@ class MockVoidFunc<Input> : MockFunc<Input, Void> {
 }
 
 extension XCTestCase {
-    func verifyAtLeastOnce<Input, Output>(mockFunc: MockFunc<Input, Output>,
+    func verifyAtLeastOnce<Input, Output>(mockFunc: _MockFunc<Input, Output>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {
             if (mockFunc.timesCalled < 1) {
@@ -47,28 +63,28 @@ extension XCTestCase {
             }
     }
 
-    func when<Input, Output>(mockFunc: MockFunc<Input, Output>, callback: MockFunc<Input, Output>.Callback) -> () {
+    func when<Input, Output>(mockFunc: _MockFunc<Input, Output>, callback: _MockFunc<Input, Output>.Callback) -> () {
         mockFunc.when(callback)
     }
 
-    func mock<Input, Output>(realFunc: (Input) -> (Output)) -> MockFunc<Input, Output> {
-        return MockFunc<Input, Output>()
+    func mock<Input, Output>(realFunc: (Input) -> (Output)) -> _MockFunc<Input, Output> {
+        return _MockFunc<Input, Output>()
     }
 
-    func mock<Input>(realFunc: (Input) -> ()) -> MockFunc<Input, Void> {
-        return MockVoidFunc<Input>()
+    func mock<Input>(realFunc: (Input) -> ()) -> _MockFunc<Input, Void> {
+        return _MockVoidFunc<Input>()
     }
 }
 
 prefix operator * {}
 
-prefix func *<Input, Output>(mockFunc: MockFunc<Input, Output>) -> (MockFunc<Input, Output>.MockedFunc) {
+prefix func *<Input, Output>(mockFunc: _MockFunc<Input, Output>) -> (_MockFunc<Input, Output>.MockedFunc) {
     return mockFunc.call
 }
-prefix func *<Input1, Input2, Output>(mockFunc: MockFunc<(Input1, Input2), Output>) -> ((Input1, Input2) -> (Output)) {
+prefix func *<Input1, Input2, Output>(mockFunc: _MockFunc<(Input1, Input2), Output>) -> ((Input1, Input2) -> (Output)) {
     return mockFunc.call
 }
 
-prefix func *<Input>(mockFunc: MockFunc<Input, Void>) -> (MockVoidFunc<Input>.MockedFunc) {
-    return (mockFunc as! MockVoidFunc<Input>).call
+prefix func *<Input>(mockFunc: _MockFunc<Input, Void>) -> (_MockVoidFunc<Input>.MockedFunc) {
+    return (mockFunc as! _MockVoidFunc<Input>).call
 }
