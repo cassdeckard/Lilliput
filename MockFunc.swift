@@ -16,3 +16,7 @@ class MockFunc<Input, Output> {
         self.callback = callback
     }
 }
+
+func when<Input, Output>(mockFunc : MockFunc<Input, Output>, callback: MockFunc<Input, Output>.Callback) -> () {
+    mockFunc.when(callback)
+}
