@@ -24,6 +24,12 @@ class MockFunc<Input, Output> {
     }
 }
 
+class MockVoidFunc<Input> : MockFunc<Input, Void> {
+    override func call(input: Input) -> () {
+        capturedArguments.append(input)
+    }
+}
+
 extension XCTestCase {
     func verifyAtLeastOnce<Input, Output>(mockFunc: MockFunc<Input, Output>,
         inFile filePath: String = __FILE__,
@@ -40,9 +46,18 @@ extension XCTestCase {
     func mock<Input, Output>(realFunc: (Input) -> (Output)) -> MockFunc<Input, Output> {
         return MockFunc<Input, Output>()
     }
+
+    func mock<Input>(realFunc: (Input) -> ()) -> MockFunc<Input, Void> {
+        return MockVoidFunc<Input>()
+    }
 }
 
 prefix operator * {}
+
 prefix func *<Input, Output>(mockFunc: MockFunc<Input, Output>) -> (MockFunc<Input, Output>.MockedFunc) {
     return mockFunc.call
+}
+
+prefix func *<Input>(mockFunc: MockFunc<Input, Void>) -> (MockVoidFunc<Input>.MockedFunc) {
+    return (mockFunc as! MockVoidFunc<Input>).call
 }

@@ -61,4 +61,15 @@ class LilliputTests: XCTestCase {
 
         XCTAssertTrue(mockFunction is MockFunc<String, String>)
     }
+
+    func testThatWeCanMockVoidFunctions_andCallThemWithoutNeedingToCallWhenFirst() {
+        func realFunction(String) -> () { return }
+
+        let mockFunction = mock(realFunction)
+
+        (*mockFunction)("test")
+
+        verifyAtLeastOnce(mockFunction)
+        XCTAssertEqual(mockFunction.capturedArguments.first!, "test")
+    }
 }
