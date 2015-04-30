@@ -5,16 +5,22 @@ class MockFunc<Input, Output> {
     typealias MockedFunc = (Input) -> (Output)
     typealias Callback = (Input) -> (Output)
 
-    var calls: [(Input)] = []
+    var capturedArguments: [(Input)] = []
     var callback: Callback!
 
     func call(input: Input) -> (Output) {
-        calls.append(input)
+        capturedArguments.append(input)
         return callback(input)
     }
 
     func when(callback: Callback) {
         self.callback = callback
+    }
+
+    var timesCalled: Int {
+        get {
+            return self.capturedArguments.count
+        }
     }
 }
 
@@ -31,7 +37,7 @@ extension XCTestCase {
     func verifyAtLeastOnce<Input, Output>(mockFunc: MockFunc<Input, Output>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {
-            if (mockFunc.calls.count < 1) {
+            if (mockFunc.timesCalled < 1) {
                 self.recordFailureWithDescription("Mocked function was not called at least once", inFile: filePath, atLine: lineNumber, expected: true)
             }
     }
