@@ -55,25 +55,10 @@ class LilliputTests: XCTestCase {
     }
 
     func testMockConstructorThatUsesRealFunction() {
-        func realFunction(String) -> String {
-            return ""
-        }
+        func realFunction(String) -> String { return "" }
 
         let mockFunction = mock(realFunction)
 
-        let expectedResult = "aResult"
-        var capturedArg : String?
-        when(mockFunction) {
-            (arg: String) in
-            capturedArg = arg
-            return expectedResult
-        }
-
-        let passedArg = "argument"
-        let result = (*mockFunction)(passedArg)
-
-        verifyAtLeastOnce(mockFunction)
-        XCTAssertEqual(capturedArg!, passedArg)
-        XCTAssertEqual(result, expectedResult)
+        XCTAssertTrue(mockFunction is MockFunc<String, String>)
     }
 }
