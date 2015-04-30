@@ -13,6 +13,11 @@ class MockFunc<Input, Output> {
         return callback(input)
     }
 
+    func call<Input1, Input2>(input1: Input1, _ input2: Input2) -> Output {
+        let input = (input1, input2) as! Input
+        return self.call(input)
+    }
+
     func when(callback: Callback) {
         self.callback = callback
     }
@@ -58,6 +63,9 @@ extension XCTestCase {
 prefix operator * {}
 
 prefix func *<Input, Output>(mockFunc: MockFunc<Input, Output>) -> (MockFunc<Input, Output>.MockedFunc) {
+    return mockFunc.call
+}
+prefix func *<Input1, Input2, Output>(mockFunc: MockFunc<(Input1, Input2), Output>) -> ((Input1, Input2) -> (Output)) {
     return mockFunc.call
 }
 

@@ -87,4 +87,25 @@ class LilliputTests: XCTestCase {
         verifyAtLeastOnce(mockFunction)
         XCTAssertEqual(capturedArg!, 13)
     }
+
+    func testThatWeCanMockFunctionsWithTwoParameters() {
+        func realFunction(String, Int) -> String { return "" }
+        let mockFunction = mock(realFunction)
+
+        var capturedString : String?
+        var capturedInt : Int?
+        when(mockFunction) {
+            (stringArg: String, intArg: Int) in
+            capturedString = stringArg
+            capturedInt = intArg
+            return "foo"
+        }
+
+        let result = (*mockFunction)("bar", 42)
+
+        verifyAtLeastOnce(mockFunction)
+        XCTAssertEqual(capturedString!, "bar")
+        XCTAssertEqual(capturedInt!, 42)
+        XCTAssertEqual(result, "foo")
+    }
 }
