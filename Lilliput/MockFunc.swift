@@ -24,8 +24,12 @@ class MockFunc<Input, Output> {
     }
 }
 
-func when<Input, Output>(mockFunc : MockFunc<Input, Output>, callback: MockFunc<Input, Output>.Callback) -> () {
+func when<Input, Output>(mockFunc: MockFunc<Input, Output>, callback: MockFunc<Input, Output>.Callback) -> () {
     mockFunc.when(callback)
+}
+
+func mock<Input, Output>(realFunc: (Input) -> (Output)) -> MockFunc<Input, Output> {
+    return MockFunc<Input, Output>()
 }
 
 prefix operator * {}
