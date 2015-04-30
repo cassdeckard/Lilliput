@@ -10,6 +10,7 @@
 		5A487C6B1AF280FB0002908D /* Lilliput.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A487C6A1AF280FB0002908D /* Lilliput.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5A487C711AF280FB0002908D /* Lilliput.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A487C651AF280FB0002908D /* Lilliput.framework */; };
 		5A487C781AF280FB0002908D /* LilliputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A487C771AF280FB0002908D /* LilliputTests.swift */; };
+		5A487C831AF281700002908D /* MockFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A487C811AF281700002908D /* MockFunc.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		5A487C701AF280FB0002908D /* LilliputTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LilliputTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A487C761AF280FB0002908D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A487C771AF280FB0002908D /* LilliputTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LilliputTests.swift; sourceTree = "<group>"; };
+		5A487C811AF281700002908D /* MockFunc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFunc.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 		5A487C671AF280FB0002908D /* Lilliput */ = {
 			isa = PBXGroup;
 			children = (
+				5A487C811AF281700002908D /* MockFunc.swift */,
 				5A487C6A1AF280FB0002908D /* Lilliput.h */,
 				5A487C681AF280FB0002908D /* Supporting Files */,
 			);
@@ -217,6 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A487C781AF280FB0002908D /* LilliputTests.swift in Sources */,
+				5A487C831AF281700002908D /* MockFunc.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +322,7 @@
 		5A487C7C1AF280FB0002908D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -329,12 +334,14 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		5A487C7D1AF280FB0002908D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -400,6 +407,7 @@
 				5A487C7D1AF280FB0002908D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5A487C7E1AF280FB0002908D /* Build configuration list for PBXNativeTarget "LilliputTests" */ = {
 			isa = XCConfigurationList;
@@ -408,6 +416,7 @@
 				5A487C801AF280FB0002908D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
