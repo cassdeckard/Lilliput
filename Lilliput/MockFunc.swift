@@ -27,6 +27,9 @@ class MockFunc<Input, Output> {
 class MockVoidFunc<Input> : MockFunc<Input, Void> {
     override func call(input: Input) -> () {
         capturedArguments.append(input)
+        if let callback = self.callback {
+            callback(input)
+        }
     }
 }
 

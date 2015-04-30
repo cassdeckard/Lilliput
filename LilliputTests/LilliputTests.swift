@@ -72,4 +72,19 @@ class LilliputTests: XCTestCase {
         verifyAtLeastOnce(mockFunction)
         XCTAssertEqual(mockFunction.capturedArguments.first!, "test")
     }
+
+    func testThatWhenDoesWorkForVoidFunctions() {
+        func realFunction(Int) -> () { return }
+
+        let mockFunction = mock(realFunction)
+        var capturedArg : Int?
+        when(mockFunction) {
+            (arg: Int) in
+            capturedArg = arg
+        }
+        (*mockFunction)(13)
+
+        verifyAtLeastOnce(mockFunction)
+        XCTAssertEqual(capturedArg!, 13)
+    }
 }
