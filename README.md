@@ -2,8 +2,13 @@
 An experiment in adding mock support to Swift
 
 ```swift
+// Say you have a function you would like to mock
+func realFunction(inString: String) -> String {
+   return inString.toLower()
+}
+
 // Create a mock for a function
-let mockStringFilter = MockFunc<String, String>()
+let mockStringFilter = mock(realFunction)
 
 // Capture an argument, and return a result
 var capturedArg : String?
