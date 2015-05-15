@@ -13,7 +13,7 @@ class _MockFunction<T: Hashable, ReturnType> {
     }
 }
 
-class MockFunctionWithBoundDefaultReturn<T: Hashable, ReturnType>: _MockFunction<T, ReturnType> {
+class MockFunction<T: Hashable, ReturnType>: _MockFunction<T, ReturnType> {
     var invocationCount = 0
     let defaultReturn: ReturnType
 
@@ -36,7 +36,7 @@ class MockFunctionWithBoundDefaultReturn<T: Hashable, ReturnType>: _MockFunction
     }
 }
 
-class MockFunction<T: Hashable, ReturnType: DefaultConstructible>: MockFunctionWithBoundDefaultReturn<T, ReturnType> {
+class MockFunctionUsingDefaultConstructorForReturn<T: Hashable, ReturnType: DefaultConstructible>: MockFunction<T, ReturnType> {
     init(bindings: Bindings) {
         super.init(bindings: bindings, defaultReturn: ReturnType())
     }
@@ -47,8 +47,8 @@ class MockFunctionWithoutDefaultReturn<T: Hashable, ReturnType>: _MockFunction<T
         super.init(bindings: bindings)
     }
 
-    func orElse(defaultReturn: ReturnType) -> MockFunctionWithBoundDefaultReturn<T, ReturnType> {
-        return MockFunctionWithBoundDefaultReturn<T, ReturnType>(bindings: self.bindings, defaultReturn: defaultReturn)
+    func orElse(defaultReturn: ReturnType) -> MockFunction<T, ReturnType> {
+        return MockFunction<T, ReturnType>(bindings: self.bindings, defaultReturn: defaultReturn)
     }
 }
 
@@ -63,8 +63,8 @@ class Binding<T where T: Hashable, T: Equatable> {
         return MockFunctionWithoutDefaultReturn<T, ReturnType>(bindings: [self: returnValue])
     }
 
-    func then<ReturnType: Hashable>(returnValue: ReturnType) -> MockFunction<T, ReturnType> {
-        return MockFunction<T, ReturnType>(bindings: [self: returnValue])
+    func then<ReturnType: Hashable>(returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<T, ReturnType> {
+        return MockFunctionUsingDefaultConstructorForReturn<T, ReturnType>(bindings: [self: returnValue])
     }
 }
 
@@ -86,7 +86,7 @@ func when<T: Hashable>(arg: T) -> Binding<T> {
 }
 
 extension XCTestCase {
-    func verifyNever<T: Hashable, ReturnType>(mockFunc: MockFunction<T, ReturnType>,
+    func verifyNever<T: Hashable, ReturnType>(mockFunc: MockFunctionUsingDefaultConstructorForReturn<T, ReturnType>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {
             if (mockFunc.invocationCount != 0) {
@@ -94,7 +94,7 @@ extension XCTestCase {
             }
     }
 
-    func verifyAtLeastOnce<T: Hashable, ReturnType>(mockFunc: MockFunction<T, ReturnType>,
+    func verifyAtLeastOnce<T: Hashable, ReturnType>(mockFunc: MockFunctionUsingDefaultConstructorForReturn<T, ReturnType>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {
             if (mockFunc.invocationCount < 1) {
