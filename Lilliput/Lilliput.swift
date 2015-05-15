@@ -62,6 +62,14 @@ func when<T: Hashable>(arg: T) -> Binding<T> {
 }
 
 extension XCTestCase {
+    func verifyNever<T: Hashable, ReturnType: DefaultConstructable>(mockFunc: MockFunction<T, ReturnType>,
+        inFile filePath: String = __FILE__,
+        atLine lineNumber: UInt = __LINE__) -> () {
+            if (mockFunc.invocationCount != 0) {
+                self.recordFailureWithDescription("Mocked function was called more than zero times", inFile: filePath, atLine: lineNumber, expected: true)
+            }
+    }
+
     func verifyAtLeastOnce<T: Hashable, ReturnType: DefaultConstructable>(mockFunc: MockFunction<T, ReturnType>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {

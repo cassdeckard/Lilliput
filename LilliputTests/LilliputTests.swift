@@ -24,4 +24,11 @@ class LilliputTests: XCTestCase {
         verifyAtLeastOnce(mockStringFilter)
         XCTAssertEqual(result, "bar")
     }
+
+    func testVerifyNever() {
+        let mockStringFilter = when("foo").then("bar")
+        let testObject = TestClass(stringFilter: mockStringFilter.unbox())
+
+        verifyNever(mockStringFilter)
+    }
 }
