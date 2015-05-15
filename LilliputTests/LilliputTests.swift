@@ -21,7 +21,7 @@ class LilliputTests: XCTestCase {
 
         let result = testObject.useStringFilter("foo")
 
-        XCTAssertEqual(mockStringFilter.invocationCount, 1)
+        verifyAtLeastOnce(mockStringFilter)
         XCTAssertEqual(result, "bar")
     }
 }

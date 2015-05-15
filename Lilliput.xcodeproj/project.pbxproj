@@ -10,7 +10,6 @@
 		5A487C6B1AF280FB0002908D /* Lilliput.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A487C6A1AF280FB0002908D /* Lilliput.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5A487C711AF280FB0002908D /* Lilliput.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A487C651AF280FB0002908D /* Lilliput.framework */; };
 		5A487C781AF280FB0002908D /* LilliputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A487C771AF280FB0002908D /* LilliputTests.swift */; };
-		E015FF4A1B0677C700F61A47 /* Lilliput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E015FF491B0677C700F61A47 /* Lilliput.swift */; };
 		E015FF4B1B06782300F61A47 /* Lilliput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E015FF491B0677C700F61A47 /* Lilliput.swift */; };
 /* End PBXBuildFile section */
 
@@ -213,7 +212,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E015FF4A1B0677C700F61A47 /* Lilliput.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

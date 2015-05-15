@@ -1,4 +1,5 @@
 import Foundation
+import XCTest
 
 protocol DefaultConstructable {
     init()
@@ -58,4 +59,14 @@ extension Binding: Equatable {}
 
 func when<T: Hashable>(arg: T) -> Binding<T> {
     return Binding(arg)
+}
+
+extension XCTestCase {
+    func verifyAtLeastOnce<T: Hashable, ReturnType: DefaultConstructable>(mockFunc: MockFunction<T, ReturnType>,
+        inFile filePath: String = __FILE__,
+        atLine lineNumber: UInt = __LINE__) -> () {
+            if (mockFunc.invocationCount < 1) {
+                self.recordFailureWithDescription("Mocked function was not called at least once", inFile: filePath, atLine: lineNumber, expected: true)
+            }
+    }
 }
