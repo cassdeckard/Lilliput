@@ -11,6 +11,8 @@
 		5A487C711AF280FB0002908D /* Lilliput.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A487C651AF280FB0002908D /* Lilliput.framework */; };
 		5A487C781AF280FB0002908D /* LilliputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A487C771AF280FB0002908D /* LilliputTests.swift */; };
 		E015FF4B1B06782300F61A47 /* Lilliput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E015FF491B0677C700F61A47 /* Lilliput.swift */; };
+		E04FE0081B068DA9003A6ED6 /* DefaultConstructible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */; };
+		E04FE00B1B068E04003A6ED6 /* DefaultConstructibleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +33,8 @@
 		5A487C761AF280FB0002908D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A487C771AF280FB0002908D /* LilliputTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LilliputTests.swift; sourceTree = "<group>"; };
 		E015FF491B0677C700F61A47 /* Lilliput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lilliput.swift; sourceTree = "<group>"; };
+		E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultConstructible.swift; sourceTree = "<group>"; };
+		E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultConstructibleExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +79,8 @@
 			children = (
 				5A487C6A1AF280FB0002908D /* Lilliput.h */,
 				E015FF491B0677C700F61A47 /* Lilliput.swift */,
+				E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */,
+				E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */,
 				5A487C681AF280FB0002908D /* Supporting Files */,
 			);
 			path = Lilliput;
@@ -220,7 +226,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E015FF4B1B06782300F61A47 /* Lilliput.swift in Sources */,
+				E04FE00B1B068E04003A6ED6 /* DefaultConstructibleExtensions.swift in Sources */,
 				5A487C781AF280FB0002908D /* LilliputTests.swift in Sources */,
+				E04FE0081B068DA9003A6ED6 /* DefaultConstructible.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

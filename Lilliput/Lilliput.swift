@@ -1,12 +1,6 @@
 import Foundation
 import XCTest
 
-protocol DefaultConstructible {
-    init()
-}
-
-extension String: DefaultConstructible {}
-
 class _MockFunction<T: Hashable, ReturnType> {
     typealias Signature = (T) -> ReturnType
     typealias TBinding = Binding<T>
