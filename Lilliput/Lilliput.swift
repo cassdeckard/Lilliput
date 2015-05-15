@@ -7,31 +7,6 @@ protocol DefaultConstructable {
 
 extension String: DefaultConstructable {}
 
-class MockFunction<T: Hashable, ReturnType: DefaultConstructable> {
-    typealias Signature = (T) -> ReturnType
-    typealias TBinding = Binding<T>
-
-    var bindings: [TBinding : ReturnType] = [:]
-    var invocationCount = 0
-
-    init(binding: Binding<T>, returnValue: ReturnType) {
-        bindings[binding] = returnValue
-    }
-
-    func unbox() -> Signature {
-        return {
-            (arg: T) in
-            self.invocationCount++
-            for (binding, returnValue) in self.bindings {
-                if arg == binding.boundArgument {
-                    return returnValue
-                }
-            }
-            return ReturnType()
-        }
-    }
-}
-
 class MockFunctionWithBoundDefaultReturn<T: Hashable, ReturnType> {
     typealias Signature = (T) -> ReturnType
     typealias TBinding = Binding<T>
@@ -56,6 +31,12 @@ class MockFunctionWithBoundDefaultReturn<T: Hashable, ReturnType> {
             }
             return self.defaultReturn
         }
+    }
+}
+
+class MockFunction<T: Hashable, ReturnType: DefaultConstructable>: MockFunctionWithBoundDefaultReturn<T, ReturnType> {
+    init(binding: Binding<T>, returnValue: ReturnType) {
+        super.init(bindings: [binding: returnValue], defaultReturn: ReturnType())
     }
 }
 
