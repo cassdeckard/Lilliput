@@ -4,18 +4,29 @@ class LilliputTests: XCTestCase {
 
     class TestClass {
         typealias StringFilter = (String) -> (String)
-        let stringFilter : StringFilter
+        typealias StringToInt = (String) -> (Int)
+
+        var stringFilter : StringFilter!
+        var stringToInt : StringToInt!
 
         init(stringFilter : StringFilter) {
             self.stringFilter = stringFilter
         }
 
+        init(stringToInt : StringToInt) {
+            self.stringToInt = stringToInt
+        }
+
         func useStringFilter(inString: String) -> String {
             return self.stringFilter(inString)
         }
+
+        func useStringToInt(inString: String) -> Int {
+            return self.stringToInt(inString)
+        }
     }
 
-    func testBasicFunctionMocking() {
+    func test_basicFunctionMocking() {
         let mockStringFilter = when("foo").then("bar")
         let testObject = TestClass(stringFilter: mockStringFilter.unbox())
 
@@ -25,7 +36,22 @@ class LilliputTests: XCTestCase {
         XCTAssertEqual(result, "bar")
     }
 
-    func testVerifyNever() {
+    // ReturnType tests
+
+    func test_returnType_canBeNotDefaultConstructable_ifDefaultIsProvided() {
+        let mockStringToInt = when("foo").then(1).orElse(2)
+        let testObject = TestClass(stringToInt: mockStringToInt.unbox())
+
+        let fooResult = testObject.useStringToInt("foo")
+        let defaultResult = testObject.useStringToInt("bar")
+
+        XCTAssertEqual(fooResult, 1)
+        XCTAssertEqual(defaultResult, 2)
+    }
+
+    // Verify tests
+
+    func test_verifyNever_succeedsWhenMockIsNeverInvoked() {
         let mockStringFilter = when("foo").then("bar")
         let testObject = TestClass(stringFilter: mockStringFilter.unbox())
 

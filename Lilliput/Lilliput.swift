@@ -32,6 +32,48 @@ class MockFunction<T: Hashable, ReturnType: DefaultConstructable> {
     }
 }
 
+class MockFunctionWithBoundDefaultReturn<T: Hashable, ReturnType> {
+    typealias Signature = (T) -> ReturnType
+    typealias TBinding = Binding<T>
+
+    var bindings: [TBinding: ReturnType] = [:]
+    var invocationCount = 0
+    let defaultReturn: ReturnType
+
+    init(bindings: [TBinding : ReturnType], defaultReturn: ReturnType) {
+        self.bindings = bindings
+        self.defaultReturn = defaultReturn
+    }
+
+    func unbox() -> Signature {
+        return {
+            (arg: T) in
+            self.invocationCount++
+            for (binding, returnValue) in self.bindings {
+                if arg == binding.boundArgument {
+                    return returnValue
+                }
+            }
+            return self.defaultReturn
+        }
+    }
+}
+
+class MockFunctionWithoutDefaultReturn<T: Hashable, ReturnType> {
+    typealias Signature = (T) -> ReturnType
+    typealias TBinding = Binding<T>
+
+    var bindings: [TBinding: ReturnType] = [:]
+
+    init(binding: Binding<T>, returnValue: ReturnType) {
+        bindings[binding] = returnValue
+    }
+
+    func orElse(defaultReturn: ReturnType) -> MockFunctionWithBoundDefaultReturn<T, ReturnType> {
+        return MockFunctionWithBoundDefaultReturn<T, ReturnType>(bindings: self.bindings, defaultReturn: defaultReturn)
+    }
+}
+
 class Binding<T where T: Hashable, T: Equatable> {
     let boundArgument: T
 
@@ -39,7 +81,11 @@ class Binding<T where T: Hashable, T: Equatable> {
         boundArgument = arg
     }
 
-    func then<ReturnType>(returnValue: ReturnType) -> MockFunction<T, ReturnType> {
+    func then<ReturnType>(returnValue: ReturnType) -> MockFunctionWithoutDefaultReturn<T, ReturnType> {
+        return MockFunctionWithoutDefaultReturn<T, ReturnType>(binding: self, returnValue: returnValue)
+    }
+
+    func then<ReturnType: Hashable>(returnValue: ReturnType) -> MockFunction<T, ReturnType> {
         return MockFunction<T, ReturnType>(binding: self, returnValue: returnValue)
     }
 }
@@ -62,7 +108,7 @@ func when<T: Hashable>(arg: T) -> Binding<T> {
 }
 
 extension XCTestCase {
-    func verifyNever<T: Hashable, ReturnType: DefaultConstructable>(mockFunc: MockFunction<T, ReturnType>,
+    func verifyNever<T: Hashable, ReturnType>(mockFunc: MockFunction<T, ReturnType>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {
             if (mockFunc.invocationCount != 0) {
@@ -70,7 +116,7 @@ extension XCTestCase {
             }
     }
 
-    func verifyAtLeastOnce<T: Hashable, ReturnType: DefaultConstructable>(mockFunc: MockFunction<T, ReturnType>,
+    func verifyAtLeastOnce<T: Hashable, ReturnType>(mockFunc: MockFunction<T, ReturnType>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {
             if (mockFunc.invocationCount < 1) {
