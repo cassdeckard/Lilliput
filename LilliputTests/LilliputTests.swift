@@ -43,10 +43,21 @@ class LilliputTests: XCTestCase {
         let testObject = TestClass(stringToInt: mockStringToInt.unbox())
 
         let fooResult = testObject.useStringToInt("foo")
-        let defaultResult = testObject.useStringToInt("bar")
+        let defaultResult = testObject.useStringToInt("NOT FOO")
 
         XCTAssertEqual(fooResult, 1)
         XCTAssertEqual(defaultResult, 2)
+    }
+
+    func test_returnType_canHaveDefaultSet_evenIfReturnTypeIsDefaultConstructible() {
+        let mockStringFilter = when("foo").then("bar").orElse("baz")
+        let testObject = TestClass(stringFilter: mockStringFilter.unbox())
+
+        let fooResult = testObject.useStringFilter("foo")
+        let defaultResult = testObject.useStringFilter("NOT FOO")
+
+        XCTAssertEqual(fooResult, "bar")
+        XCTAssertEqual(defaultResult, "baz")
     }
 
     // Verify tests
