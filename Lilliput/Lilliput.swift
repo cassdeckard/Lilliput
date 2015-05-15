@@ -63,7 +63,7 @@ class Binding<T where T: Hashable, T: Equatable> {
         return MockFunctionWithoutDefaultReturn<T, ReturnType>(bindings: [self: returnValue])
     }
 
-    func then<ReturnType: Hashable>(returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<T, ReturnType> {
+    func then<ReturnType>(returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<T, ReturnType> {
         return MockFunctionUsingDefaultConstructorForReturn<T, ReturnType>(bindings: [self: returnValue])
     }
 }
