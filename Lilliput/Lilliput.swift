@@ -21,6 +21,11 @@ class MockFunction<T: Hashable, ReturnType: DefaultConstructable> {
         return {
             (arg: T) in
             self.invocationCount++
+            for (binding, returnValue) in self.bindings {
+                if arg == binding.boundArgument {
+                    return returnValue
+                }
+            }
             return ReturnType()
         }
     }

@@ -17,11 +17,11 @@ class LilliputTests: XCTestCase {
 
     func testBasicFunctionMocking() {
         let mockStringFilter = when("foo").then("bar")
-
         let testObject = TestClass(stringFilter: mockStringFilter.unbox())
 
         let result = testObject.useStringFilter("foo")
 
         XCTAssertEqual(mockStringFilter.invocationCount, 1)
+        XCTAssertEqual(result, "bar")
     }
 }
