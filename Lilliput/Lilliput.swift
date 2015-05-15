@@ -1,11 +1,11 @@
 import Foundation
 import XCTest
 
-protocol DefaultConstructable {
+protocol DefaultConstructible {
     init()
 }
 
-extension String: DefaultConstructable {}
+extension String: DefaultConstructible {}
 
 class _MockFunction<T: Hashable, ReturnType> {
     typealias Signature = (T) -> ReturnType
@@ -42,7 +42,7 @@ class MockFunctionWithBoundDefaultReturn<T: Hashable, ReturnType>: _MockFunction
     }
 }
 
-class MockFunction<T: Hashable, ReturnType: DefaultConstructable>: MockFunctionWithBoundDefaultReturn<T, ReturnType> {
+class MockFunction<T: Hashable, ReturnType: DefaultConstructible>: MockFunctionWithBoundDefaultReturn<T, ReturnType> {
     init(bindings: Bindings) {
         super.init(bindings: bindings, defaultReturn: ReturnType())
     }
