@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 
+protocol Mock { }
 
 class NoArgument: Equatable { }
 
@@ -21,7 +22,7 @@ func ==<T: Equatable>(lhs: ArgumentBinder<T>, rhs: T) -> Bool {
 
 // MARK: MockFunction
 
-class _MockFunction<A: Equatable, B: Equatable, ReturnType> {
+class _MockFunction<A: Equatable, B: Equatable, ReturnType>: Mock {
     typealias Signature = (A, B) -> ReturnType
     typealias Signature_ = (A) -> ReturnType
     typealias TBinding = Binding<A, B>
@@ -32,6 +33,10 @@ class _MockFunction<A: Equatable, B: Equatable, ReturnType> {
     init(bindings: Bindings) {
         self.bindings = bindings
     }
+
+    func addBinding(#binding: TBinding, returnValue: ReturnType) {
+        self.bindings.append((binding, returnValue))
+    }
 }
 
 class MockFunction<A: Equatable, B:Equatable, ReturnType>: _MockFunction<A, B, ReturnType> {
@@ -41,6 +46,14 @@ class MockFunction<A: Equatable, B:Equatable, ReturnType>: _MockFunction<A, B, R
     init(bindings: Bindings, defaultReturn: ReturnType) {
         self.defaultReturn = defaultReturn
         super.init(bindings: bindings)
+    }
+
+    func when(argA: A, _ argB: B) -> Binding<A, B> {
+        return Binding(argA, argB, mock: self)
+    }
+
+    func when(argA: A) -> Binding<A, NoArgument> {
+        return Binding(argA, NoArgument(), mock: self)
     }
 }
 
@@ -83,6 +96,7 @@ func unbox<A: Equatable, ReturnType>(mock: MockFunction<A, NoArgument, ReturnTyp
 // MARK: Bindings
 
 class Binding<A: Equatable, B: Equatable> {
+    var mock: Mock?
     let boundArgumentA: ArgumentBinder<A>
     let boundArgumentB: ArgumentBinder<B>
 
@@ -91,11 +105,24 @@ class Binding<A: Equatable, B: Equatable> {
         boundArgumentB = ArgumentBinder<B>(argB)
     }
 
+    convenience init(_ argA: A, _ argB: B, mock: Mock) {
+        self.init(argA, argB)
+        self.mock = mock
+    }
+
     func then<ReturnType>(returnValue: ReturnType) -> MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
+        if let mock = self.mock as? MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
+            mock.addBinding(binding: self, returnValue: returnValue)
+            return mock
+        }
         return MockFunctionWithoutDefaultReturn<A, B, ReturnType>(bindings: [(self, returnValue)])
     }
 
     func then<ReturnType>(returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
+        if let mock = self.mock as? MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
+            mock.addBinding(binding: self, returnValue: returnValue)
+            return mock
+        }
         return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>(bindings: [(self, returnValue)])
     }
 

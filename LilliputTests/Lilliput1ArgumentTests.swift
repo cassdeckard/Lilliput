@@ -36,6 +36,23 @@ class Lilliput1ArgumentTests: XCTestCase {
         XCTAssertEqual(result, "bar")
     }
 
+    func test_multipleWhenThens() {
+        let mockStringFilter = when("foo").then("bar")
+
+        let binding = mockStringFilter.when("bar")
+        binding.then("baz")
+        let testObject = TestClass(stringFilter: unbox(mockStringFilter))
+
+        let result1 = testObject.useStringFilter("foo")
+        let result2 = testObject.useStringFilter("bar")
+        let defaultResult = testObject.useStringFilter("baz")
+
+        verifyAtLeastOnce(mockStringFilter)
+        XCTAssertEqual(result1, "bar")
+        XCTAssertEqual(result2, "baz")
+        XCTAssertEqual(defaultResult, "")
+    }
+
     // ReturnType tests
 
     func test_returnType_canBeNotDefaultConstructable_ifDefaultIsProvided() {

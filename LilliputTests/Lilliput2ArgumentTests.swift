@@ -36,6 +36,21 @@ class Lilliput2ArgumentTests: XCTestCase {
         XCTAssertEqual(result, "bar")
     }
 
+    func test_multipleWhenThens() {
+        let mockStringIntToString = when("foo", 42).then("bar")
+        mockStringIntToString.when("foo", 23).then("baz")
+        let testObject = TestClass(stringIntToString: unbox(mockStringIntToString))
+
+        let result1 = testObject.useStringIntToString("foo", 42)
+        let result2 = testObject.useStringIntToString("foo", 23)
+        let defaultResult = testObject.useStringIntToString("foo", 2)
+
+        verifyAtLeastOnce(mockStringIntToString)
+        XCTAssertEqual(result1, "bar")
+        XCTAssertEqual(result2, "baz")
+        XCTAssertEqual(defaultResult, "")
+    }
+
     // ReturnType tests
 
     func test_returnType_canBeNotDefaultConstructable_ifDefaultIsProvided() {
