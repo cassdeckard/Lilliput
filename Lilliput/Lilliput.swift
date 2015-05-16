@@ -52,6 +52,8 @@ class MockFunctionWithoutDefaultReturn<T: Hashable, ReturnType>: _MockFunction<T
     }
 }
 
+// MARK: Bindings
+
 class Binding<T where T: Hashable, T: Equatable> {
     let boundArgument: T
 
@@ -80,6 +82,8 @@ func ==<T where T: Hashable, T: Equatable>(lhs: Binding<T>, rhs: Binding<T>) -> 
     return lhs.boundArgument == rhs.boundArgument
 }
 extension Binding: Equatable {}
+
+// MARK: Syntactic Sugar
 
 func when<T: Hashable>(arg: T) -> Binding<T> {
     return Binding(arg)
