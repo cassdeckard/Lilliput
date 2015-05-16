@@ -1,9 +1,9 @@
 import Foundation
 import XCTest
 
-class _MockFunction<T: Equatable, ReturnType> {
-    typealias Signature = (T) -> ReturnType
-    typealias TBinding = Binding<T>
+class _MockFunction1<A: Equatable, ReturnType> {
+    typealias Signature = (A) -> ReturnType
+    typealias TBinding = Binding1<A>
     typealias Bindings = [(TBinding, ReturnType)]
 
     var bindings: Bindings
@@ -13,7 +13,7 @@ class _MockFunction<T: Equatable, ReturnType> {
     }
 }
 
-class MockFunction<T: Equatable, ReturnType>: _MockFunction<T, ReturnType> {
+class MockFunction1<A: Equatable, ReturnType>: _MockFunction1<A, ReturnType> {
     var invocationCount = 0
     let defaultReturn: ReturnType
 
@@ -24,10 +24,10 @@ class MockFunction<T: Equatable, ReturnType>: _MockFunction<T, ReturnType> {
 
     func unbox() -> Signature {
         return {
-            (arg: T) in
+            (arg: A) in
             self.invocationCount++
             for (binding, returnValue) in self.bindings {
-                if arg == binding.boundArgument {
+                if arg == binding.boundArgumentA {
                     return returnValue
                 }
             }
@@ -36,48 +36,48 @@ class MockFunction<T: Equatable, ReturnType>: _MockFunction<T, ReturnType> {
     }
 }
 
-class MockFunctionUsingDefaultConstructorForReturn<T: Equatable, ReturnType: DefaultConstructible>: MockFunction<T, ReturnType> {
+class MockFunction1UsingDefaultConstructorForReturn<A: Equatable, ReturnType: DefaultConstructible>: MockFunction1<A, ReturnType> {
     init(bindings: Bindings) {
         super.init(bindings: bindings, defaultReturn: ReturnType())
     }
 }
 
-class MockFunctionWithoutDefaultReturn<T: Equatable, ReturnType>: _MockFunction<T, ReturnType> {
+class MockFunction1WithoutDefaultReturn<A: Equatable, ReturnType>: _MockFunction1<A, ReturnType> {
     override init(bindings: Bindings) { // FIXME: why is this needed?
         super.init(bindings: bindings)
     }
 
-    func orElse(defaultReturn: ReturnType) -> MockFunction<T, ReturnType> {
-        return MockFunction<T, ReturnType>(bindings: self.bindings, defaultReturn: defaultReturn)
+    func orElse(defaultReturn: ReturnType) -> MockFunction1<A, ReturnType> {
+        return MockFunction1<A, ReturnType>(bindings: self.bindings, defaultReturn: defaultReturn)
     }
 }
 
 // MARK: Bindings
 
-class Binding<T: Equatable> {
-    let boundArgument: T
+class Binding1<A: Equatable> {
+    let boundArgumentA: A
 
-    init(_ arg: T) {
-        boundArgument = arg
+    init(_ argA: A) {
+        boundArgumentA = argA
     }
 
-    func then<ReturnType>(returnValue: ReturnType) -> MockFunctionWithoutDefaultReturn<T, ReturnType> {
-        return MockFunctionWithoutDefaultReturn<T, ReturnType>(bindings: [(self, returnValue)])
+    func then<ReturnType>(returnValue: ReturnType) -> MockFunction1WithoutDefaultReturn<A, ReturnType> {
+        return MockFunction1WithoutDefaultReturn<A, ReturnType>(bindings: [(self, returnValue)])
     }
 
-    func then<ReturnType>(returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<T, ReturnType> {
-        return MockFunctionUsingDefaultConstructorForReturn<T, ReturnType>(bindings: [(self, returnValue)])
+    func then<ReturnType>(returnValue: ReturnType) -> MockFunction1UsingDefaultConstructorForReturn<A, ReturnType> {
+        return MockFunction1UsingDefaultConstructorForReturn<A, ReturnType>(bindings: [(self, returnValue)])
     }
 }
 
 // MARK: Syntactic Sugar
 
-func when<T: Equatable>(arg: T) -> Binding<T> {
-    return Binding(arg)
+func when<A: Equatable>(arg: A) -> Binding1<A> {
+    return Binding1(arg)
 }
 
 extension XCTestCase {
-    func verifyNever<T: Equatable, ReturnType>(mockFunc: MockFunction<T, ReturnType>,
+    func verifyNever<A: Equatable, ReturnType>(mockFunc: MockFunction1<A, ReturnType>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {
             if (mockFunc.invocationCount != 0) {
@@ -85,7 +85,7 @@ extension XCTestCase {
             }
     }
 
-    func verifyAtLeastOnce<T: Equatable, ReturnType>(mockFunc: MockFunction<T, ReturnType>,
+    func verifyAtLeastOnce<A: Equatable, ReturnType>(mockFunc: MockFunction1<A, ReturnType>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {
             if (mockFunc.invocationCount < 1) {

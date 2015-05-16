@@ -13,6 +13,7 @@
 		E015FF4B1B06782300F61A47 /* Lilliput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E015FF491B0677C700F61A47 /* Lilliput.swift */; };
 		E04FE0081B068DA9003A6ED6 /* DefaultConstructible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */; };
 		E04FE00B1B068E04003A6ED6 /* DefaultConstructibleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */; };
+		E0ACD8A01B06ED1700AAFD73 /* Lilliput2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACD89F1B06ED1700AAFD73 /* Lilliput2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		E015FF491B0677C700F61A47 /* Lilliput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lilliput.swift; sourceTree = "<group>"; };
 		E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultConstructible.swift; sourceTree = "<group>"; };
 		E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultConstructibleExtensions.swift; sourceTree = "<group>"; };
+		E0ACD89F1B06ED1700AAFD73 /* Lilliput2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lilliput2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			children = (
 				5A487C6A1AF280FB0002908D /* Lilliput.h */,
 				E015FF491B0677C700F61A47 /* Lilliput.swift */,
+				E0ACD89F1B06ED1700AAFD73 /* Lilliput2.swift */,
 				E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */,
 				E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */,
 				5A487C681AF280FB0002908D /* Supporting Files */,
@@ -227,6 +230,7 @@
 			files = (
 				E015FF4B1B06782300F61A47 /* Lilliput.swift in Sources */,
 				E04FE00B1B068E04003A6ED6 /* DefaultConstructibleExtensions.swift in Sources */,
+				E0ACD8A01B06ED1700AAFD73 /* Lilliput2.swift in Sources */,
 				5A487C781AF280FB0002908D /* LilliputTests.swift in Sources */,
 				E04FE0081B068DA9003A6ED6 /* DefaultConstructible.swift in Sources */,
 			);
