@@ -28,7 +28,7 @@ class LilliputOneArgumentTests: XCTestCase {
 
     func test_basicFunctionMocking() {
         let mockStringFilter = when("foo").then("bar")
-        let testObject = TestClass(stringFilter: mockStringFilter.unbox())
+        let testObject = TestClass(stringFilter: unbox(mockStringFilter))
 
         let result = testObject.useStringFilter("foo")
 
@@ -40,7 +40,7 @@ class LilliputOneArgumentTests: XCTestCase {
 
     func test_returnType_canBeNotDefaultConstructable_ifDefaultIsProvided() {
         let mockStringToInt = when("foo").then(1).orElse(2)
-        let testObject = TestClass(stringToInt: mockStringToInt.unbox())
+        let testObject = TestClass(stringToInt: unbox(mockStringToInt))
 
         let fooResult = testObject.useStringToInt("foo")
         let defaultResult = testObject.useStringToInt("NOT FOO")
@@ -52,7 +52,7 @@ class LilliputOneArgumentTests: XCTestCase {
 
     func test_returnType_canHaveDefaultSet_evenIfReturnTypeIsDefaultConstructible() {
         let mockStringFilter = when("foo").then("bar").orElse("baz")
-        let testObject = TestClass(stringFilter: mockStringFilter.unbox())
+        let testObject = TestClass(stringFilter: unbox(mockStringFilter))
 
         let fooResult = testObject.useStringFilter("foo")
         let defaultResult = testObject.useStringFilter("NOT FOO")
@@ -66,7 +66,7 @@ class LilliputOneArgumentTests: XCTestCase {
 
     func test_verifyNever_succeedsWhenMockIsNeverInvoked() {
         let mockStringFilter = when("foo").then("bar")
-        let testObject = TestClass(stringFilter: mockStringFilter.unbox())
+        let testObject = TestClass(stringFilter: unbox(mockStringFilter))
 
         verifyNever(mockStringFilter)
     }
@@ -100,10 +100,8 @@ class LilliputTwoArgumentTests: XCTestCase {
     }
 
     func test_basicFunctionMocking() {
-        let mockStringIntToString = when("foo", 42).then("bar") as MockFunction2<String, Int, String>
-        // FIXME: why is the "as" needed here but not for the one argument case?
-        // Compiler bug?
-        let testObject = TestClass(stringIntToString: mockStringIntToString.unbox())
+        let mockStringIntToString = when("foo", 42).then("bar")
+        let testObject = TestClass(stringIntToString: unbox(mockStringIntToString))
 
         let result = testObject.useStringIntToString("foo", 42)
 
@@ -114,9 +112,9 @@ class LilliputTwoArgumentTests: XCTestCase {
     // ReturnType tests
 
     func test_returnType_canBeNotDefaultConstructable_ifDefaultIsProvided() {
-        let mockStringsToInt = when("foo", "bar").then(1).orElse(2) as MockFunction2<String, String, Int>
+        let mockStringsToInt = when("foo", "bar").then(1).orElse(2)
 
-        let testObject = TestClass(stringsToInt: mockStringsToInt.unbox())
+        let testObject = TestClass(stringsToInt: unbox(mockStringsToInt))
 
         let fooBarResult = testObject.useStringsToInt("foo", "bar")
         let defaultResult = testObject.useStringsToInt("foo", "NOT BAR")
@@ -127,8 +125,8 @@ class LilliputTwoArgumentTests: XCTestCase {
     }
 
     func test_returnType_canHaveDefaultSet_evenIfReturnTypeIsDefaultConstructible() {
-        let mockStringIntToString = when("foo", 42).then("bar").orElse("baz") as MockFunction2<String, Int, String>
-        let testObject = TestClass(stringIntToString: mockStringIntToString.unbox())
+        let mockStringIntToString = when("foo", 42).then("bar").orElse("baz")
+        let testObject = TestClass(stringIntToString: unbox(mockStringIntToString))
 
         let foo42Result = testObject.useStringIntToString("foo", 42)
         let defaultResult1 = testObject.useStringIntToString("foo", 43)
@@ -143,10 +141,8 @@ class LilliputTwoArgumentTests: XCTestCase {
     // Verify tests
 
     func test_verifyNever_succeedsWhenMockIsNeverInvoked() {
-        let mockStringIntToString = when("foo", 42).then("bar") as MockFunction2<String, Int, String>
-        // FIXME: why is the "as" needed here but not for the one argument case?
-        // Compiler bug?
-        let testObject = TestClass(stringIntToString: mockStringIntToString.unbox())
+        let mockStringIntToString = when("foo", 42).then("bar")
+        let testObject = TestClass(stringIntToString: unbox(mockStringIntToString))
 
         verifyNever(mockStringIntToString)
     }

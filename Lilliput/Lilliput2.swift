@@ -1,8 +1,29 @@
 import Foundation
 import XCTest
 
+
+class NoArgument: Equatable { }
+
+func ==(lhs: NoArgument, rhs: NoArgument) -> Bool {
+    return true
+}
+
+class ArgumentBinder<T: Equatable> {
+    let arg: T?
+    init(_ arg: T) {
+        self.arg = arg
+    }
+}
+
+func ==<T: Equatable>(lhs: ArgumentBinder<T>, rhs: T) -> Bool {
+    return lhs.arg == rhs
+}
+
+// MARK: MockFunction
+
 class _MockFunction2<A: Equatable, B: Equatable, ReturnType> {
     typealias Signature = (A, B) -> ReturnType
+    typealias Signature_ = (A) -> ReturnType
     typealias TBinding = Binding2<A, B>
     typealias Bindings = [(TBinding, ReturnType)]
 
@@ -21,19 +42,31 @@ class MockFunction2<A: Equatable, B:Equatable, ReturnType>: _MockFunction2<A, B,
         self.defaultReturn = defaultReturn
         super.init(bindings: bindings)
     }
+}
 
-    func unbox() -> Signature {
-        return {
-            (argA: A, argB: B) in
-            self.invocationCount++
-            for (binding, returnValue) in self.bindings {
-                if argA == binding.boundArgumentA &&
-                   argB == binding.boundArgumentB {
-                    return returnValue
-                }
+func unbox<A: Equatable, B: Equatable, ReturnType>(mock: MockFunction2<A, B, ReturnType>) -> MockFunction2<A, B, ReturnType>.Signature {
+    return {
+        (argA: A, argB: B) in
+        mock.invocationCount++
+        for (binding, returnValue) in mock.bindings {
+            if binding.matches(argA, argB) {
+                return returnValue
             }
-            return self.defaultReturn
         }
+        return mock.defaultReturn
+    }
+}
+
+func unbox<A: Equatable, ReturnType>(mock: MockFunction2<A, NoArgument, ReturnType>) -> MockFunction2<A, NoArgument, ReturnType>.Signature_ {
+    return {
+        (argA: A) in
+        mock.invocationCount++
+        for (binding, returnValue) in mock.bindings {
+            if binding.matches(argA, NoArgument()) {
+                return returnValue
+            }
+        }
+        return mock.defaultReturn
     }
 }
 
@@ -55,12 +88,13 @@ class MockFunction2WithoutDefaultReturn<A: Equatable, B: Equatable, ReturnType>:
 
 // MARK: Bindings
 
-class Binding2<A: Equatable, B: Equatable>: Binding1<A> {
-    let boundArgumentB: B
+class Binding2<A: Equatable, B: Equatable> {
+    let boundArgumentA: ArgumentBinder<A>
+    let boundArgumentB: ArgumentBinder<B>
 
     init(_ argA: A, _ argB: B) {
-        boundArgumentB = argB
-        super.init(argA)
+        boundArgumentA = ArgumentBinder<A>(argA)
+        boundArgumentB = ArgumentBinder<B>(argB)
     }
 
     func then<ReturnType>(returnValue: ReturnType) -> MockFunction2WithoutDefaultReturn<A, B, ReturnType> {
@@ -70,12 +104,21 @@ class Binding2<A: Equatable, B: Equatable>: Binding1<A> {
     func then<ReturnType>(returnValue: ReturnType) -> MockFunction2UsingDefaultConstructorForReturn<A, B, ReturnType> {
         return MockFunction2UsingDefaultConstructorForReturn<A, B, ReturnType>(bindings: [(self, returnValue)])
     }
+
+    func matches(argA: A, _ argB: B) -> Bool {
+        return boundArgumentA.arg == argA &&
+               boundArgumentB.arg == argB
+    }
 }
 
 // MARK: Syntactic Sugar
 
 func when<A: Equatable, B: Equatable>(argA: A, argB: B) -> Binding2<A, B> {
     return Binding2(argA, argB)
+}
+
+func when<A: Equatable>(argA: A) -> Binding2<A, NoArgument> {
+    return Binding2(argA, NoArgument())
 }
 
 extension XCTestCase {
