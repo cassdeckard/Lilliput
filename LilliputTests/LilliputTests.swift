@@ -1,130 +1,149 @@
-import Cocoa
 import XCTest
 
-class LilliputTests: XCTestCase {
+class LilliputOneArgumentTests: XCTestCase {
 
     class TestClass {
         typealias StringFilter = (String) -> (String)
-        let stringFilter : StringFilter
+        typealias StringToInt = (String) -> (Int)
+
+        var stringFilter : StringFilter!
+        var stringToInt : StringToInt!
 
         init(stringFilter : StringFilter) {
             self.stringFilter = stringFilter
         }
 
+        init(stringToInt : StringToInt) {
+            self.stringToInt = stringToInt
+        }
+
         func useStringFilter(inString: String) -> String {
             return self.stringFilter(inString)
         }
+
+        func useStringToInt(inString: String) -> Int {
+            return self.stringToInt(inString)
+        }
     }
 
-    func testBasicFunctionMocking() {
-        let mockStringFilter = _MockFunc<String, String>()
-        var capturedArg : String?
-        let expectedResult = "result"
-        when(mockStringFilter) {
-            (arg: String) in
-            capturedArg = arg
-            return expectedResult
-        }
+    func test_basicFunctionMocking() {
+        let mockStringFilter = when("foo").then("bar")
+        let testObject = TestClass(stringFilter: unbox(mockStringFilter))
 
-        let passedArg = "argument"
-        let result = (*mockStringFilter)(passedArg)
+        let result = testObject.useStringFilter("foo")
 
         verifyAtLeastOnce(mockStringFilter)
-        XCTAssertEqual(capturedArg!, passedArg)
-        XCTAssertEqual(result, expectedResult)
+        XCTAssertEqual(result, "bar")
     }
 
-    func testThatWeCanInjectTheMock() {
-        let mockStringFilter = _MockFunc<String, String>()
-        var capturedArg : String?
-        let expectedResult = "aResult"
-        when(mockStringFilter) {
-            (arg: String) in
-            capturedArg = arg
-            return expectedResult
-        }
+    // ReturnType tests
 
-        let passedArg = "anArgument"
-        let testClass = TestClass(stringFilter: *mockStringFilter)
+    func test_returnType_canBeNotDefaultConstructable_ifDefaultIsProvided() {
+        let mockStringToInt = when("foo").then(1).orElse(2)
+        let testObject = TestClass(stringToInt: unbox(mockStringToInt))
 
-        let result = testClass.useStringFilter(passedArg)
+        let fooResult = testObject.useStringToInt("foo")
+        let defaultResult = testObject.useStringToInt("NOT FOO")
+
+        verifyAtLeastOnce(mockStringToInt)
+        XCTAssertEqual(fooResult, 1)
+        XCTAssertEqual(defaultResult, 2)
+    }
+
+    func test_returnType_canHaveDefaultSet_evenIfReturnTypeIsDefaultConstructible() {
+        let mockStringFilter = when("foo").then("bar").orElse("baz")
+        let testObject = TestClass(stringFilter: unbox(mockStringFilter))
+
+        let fooResult = testObject.useStringFilter("foo")
+        let defaultResult = testObject.useStringFilter("NOT FOO")
 
         verifyAtLeastOnce(mockStringFilter)
-        XCTAssertEqual(capturedArg!, passedArg)
-        XCTAssertEqual(result, expectedResult)
+        XCTAssertEqual(fooResult, "bar")
+        XCTAssertEqual(defaultResult, "baz")
     }
 
-    func testMockConstructorThatUsesRealFunction() {
-        func realFunction(String) -> String { return "" }
+    // Verify tests
 
-        let mockFunction = mock(realFunction)
+    func test_verifyNever_succeedsWhenMockIsNeverInvoked() {
+        let mockStringFilter = when("foo").then("bar")
+        let testObject = TestClass(stringFilter: unbox(mockStringFilter))
 
-        XCTAssertTrue(mockFunction is _MockFunc<String, String>)
+        verifyNever(mockStringFilter)
     }
+}
 
-    func testThatWeCanMockVoidFunctions_andCallThemWithoutNeedingToCallWhenFirst() {
-        func realFunction(String) -> () { return }
 
-        let mockFunction = mock(realFunction)
+class LilliputTwoArgumentTests: XCTestCase {
 
-        (*mockFunction)("test")
+    class TestClass {
+        typealias StringIntToString = (String, Int) -> (String)
+        typealias StringsToInt = (String, String) -> (Int)
 
-        verifyAtLeastOnce(mockFunction)
-        XCTAssertEqual(mockFunction.capturedArguments.first!, "test")
-    }
+        var stringIntToString : StringIntToString!
+        var stringsToInt : StringsToInt!
 
-    func testThatWhenDoesWorkForVoidFunctions() {
-        func realFunction(Int) -> () { return }
-
-        let mockFunction = mock(realFunction)
-        var capturedArg : Int?
-        when(mockFunction) {
-            (arg: Int) in
-            capturedArg = arg
-        }
-        (*mockFunction)(13)
-
-        verifyAtLeastOnce(mockFunction)
-        XCTAssertEqual(capturedArg!, 13)
-    }
-
-    func testThatWeCanMockFunctionsWithTwoParameters() {
-        func realFunction(String, Int) -> String { return "" }
-        let mockFunction = mock(realFunction)
-
-        var capturedString : String?
-        var capturedInt : Int?
-        when(mockFunction) {
-            (stringArg: String, intArg: Int) in
-            capturedString = stringArg
-            capturedInt = intArg
-            return "foo"
+        init(stringIntToString : StringIntToString) {
+            self.stringIntToString = stringIntToString
         }
 
-        let result = (*mockFunction)("bar", 42)
-
-        verifyAtLeastOnce(mockFunction)
-        XCTAssertEqual(capturedString!, "bar")
-        XCTAssertEqual(capturedInt!, 42)
-        XCTAssertEqual(result, "foo")
-    }
-
-    func testThatWeCanMockVoidFunctionsWithTwoParameters() {
-        func realFunction(String, Int) -> () { }
-        let mockFunction = mock(realFunction)
-
-        var capturedString : String?
-        var capturedInt : Int?
-        when(mockFunction) {
-            (stringArg: String, intArg: Int) in
-            capturedString = stringArg
-            capturedInt = intArg
+        init(stringsToInt : StringsToInt) {
+            self.stringsToInt = stringsToInt
         }
 
-        (*mockFunction)("YO", -23)
+        func useStringIntToString(lhs: String, _ rhs: Int) -> String {
+            return self.stringIntToString(lhs, rhs)
+        }
 
-        verifyAtLeastOnce(mockFunction)
-        XCTAssertEqual(capturedString!, "YO")
-        XCTAssertEqual(capturedInt!, -23)
+        func useStringsToInt(lhs: String, _ rhs: String) -> Int {
+            return self.stringsToInt(lhs, rhs)
+        }
+    }
+
+    func test_basicFunctionMocking() {
+        let mockStringIntToString = when("foo", 42).then("bar")
+        let testObject = TestClass(stringIntToString: unbox(mockStringIntToString))
+
+        let result = testObject.useStringIntToString("foo", 42)
+
+        verifyAtLeastOnce(mockStringIntToString)
+        XCTAssertEqual(result, "bar")
+    }
+
+    // ReturnType tests
+
+    func test_returnType_canBeNotDefaultConstructable_ifDefaultIsProvided() {
+        let mockStringsToInt = when("foo", "bar").then(1).orElse(2)
+
+        let testObject = TestClass(stringsToInt: unbox(mockStringsToInt))
+
+        let fooBarResult = testObject.useStringsToInt("foo", "bar")
+        let defaultResult = testObject.useStringsToInt("foo", "NOT BAR")
+
+        verifyAtLeastOnce(mockStringsToInt)
+        XCTAssertEqual(fooBarResult, 1)
+        XCTAssertEqual(defaultResult, 2)
+    }
+
+    func test_returnType_canHaveDefaultSet_evenIfReturnTypeIsDefaultConstructible() {
+        let mockStringIntToString = when("foo", 42).then("bar").orElse("baz")
+        let testObject = TestClass(stringIntToString: unbox(mockStringIntToString))
+
+        let foo42Result = testObject.useStringIntToString("foo", 42)
+        let defaultResult1 = testObject.useStringIntToString("foo", 43)
+        let defaultResult2 = testObject.useStringIntToString("NOT FOO", 42)
+
+        verifyAtLeastOnce(mockStringIntToString)
+        XCTAssertEqual(foo42Result, "bar")
+        XCTAssertEqual(defaultResult1, "baz")
+        XCTAssertEqual(defaultResult1, "baz")
+    }
+
+    // Verify tests
+
+    func test_verifyNever_succeedsWhenMockIsNeverInvoked() {
+        let mockStringIntToString = when("foo", 42).then("bar")
+        let testObject = TestClass(stringIntToString: unbox(mockStringIntToString))
+
+        verifyNever(mockStringIntToString)
     }
 }
