@@ -70,11 +70,6 @@ class Binding<T: Equatable> {
     }
 }
 
-func ==<T: Equatable>(lhs: Binding<T>, rhs: Binding<T>) -> Bool {
-    return lhs.boundArgument == rhs.boundArgument
-}
-extension Binding: Equatable {}
-
 // MARK: Syntactic Sugar
 
 func when<T: Equatable>(arg: T) -> Binding<T> {
