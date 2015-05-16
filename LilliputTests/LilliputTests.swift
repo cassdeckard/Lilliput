@@ -45,6 +45,7 @@ class LilliputTests: XCTestCase {
         let fooResult = testObject.useStringToInt("foo")
         let defaultResult = testObject.useStringToInt("NOT FOO")
 
+        verifyAtLeastOnce(mockStringToInt)
         XCTAssertEqual(fooResult, 1)
         XCTAssertEqual(defaultResult, 2)
     }
@@ -56,6 +57,7 @@ class LilliputTests: XCTestCase {
         let fooResult = testObject.useStringFilter("foo")
         let defaultResult = testObject.useStringFilter("NOT FOO")
 
+        verifyAtLeastOnce(mockStringFilter)
         XCTAssertEqual(fooResult, "bar")
         XCTAssertEqual(defaultResult, "baz")
     }

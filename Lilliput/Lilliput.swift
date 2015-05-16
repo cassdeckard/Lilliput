@@ -82,7 +82,7 @@ func when<T: Equatable>(arg: T) -> Binding<T> {
 }
 
 extension XCTestCase {
-    func verifyNever<T: Equatable, ReturnType>(mockFunc: MockFunctionUsingDefaultConstructorForReturn<T, ReturnType>,
+    func verifyNever<T: Equatable, ReturnType>(mockFunc: MockFunction<T, ReturnType>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {
             if (mockFunc.invocationCount != 0) {
@@ -90,7 +90,7 @@ extension XCTestCase {
             }
     }
 
-    func verifyAtLeastOnce<T: Equatable, ReturnType>(mockFunc: MockFunctionUsingDefaultConstructorForReturn<T, ReturnType>,
+    func verifyAtLeastOnce<T: Equatable, ReturnType>(mockFunc: MockFunction<T, ReturnType>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {
             if (mockFunc.invocationCount < 1) {
