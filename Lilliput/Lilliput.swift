@@ -44,6 +44,24 @@ class MockFunction<A: Equatable, B:Equatable, ReturnType>: _MockFunction<A, B, R
     }
 }
 
+class MockFunctionUsingDefaultConstructorForReturn<A: Equatable, B: Equatable, ReturnType: DefaultConstructible>: MockFunction<A, B, ReturnType> {
+    init(bindings: Bindings) {
+        super.init(bindings: bindings, defaultReturn: ReturnType())
+    }
+}
+
+class MockFunctionWithoutDefaultReturn<A: Equatable, B: Equatable, ReturnType>: _MockFunction<A, B, ReturnType> {
+    override init(bindings: Bindings) { // FIXME: why is this needed?
+        super.init(bindings: bindings)
+    }
+
+    func orElse(defaultReturn: ReturnType) -> MockFunction<A, B, ReturnType> {
+        return MockFunction<A, B, ReturnType>(bindings: self.bindings, defaultReturn: defaultReturn)
+    }
+}
+
+// MARK: Unboxing
+
 func _unbox<A: Equatable, B: Equatable, ReturnType>(mock: MockFunction<A, B, ReturnType>, argA: A, argB: B) -> ReturnType {
     mock.invocationCount++
     for (binding, returnValue) in mock.bindings {
@@ -60,22 +78,6 @@ func unbox<A: Equatable, B: Equatable, ReturnType>(mock: MockFunction<A, B, Retu
 
 func unbox<A: Equatable, ReturnType>(mock: MockFunction<A, NoArgument, ReturnType>) -> MockFunction<A, NoArgument, ReturnType>.Signature_ {
     return { _unbox(mock, $0, NoArgument()) }
-}
-
-class MockFunctionUsingDefaultConstructorForReturn<A: Equatable, B: Equatable, ReturnType: DefaultConstructible>: MockFunction<A, B, ReturnType> {
-    init(bindings: Bindings) {
-        super.init(bindings: bindings, defaultReturn: ReturnType())
-    }
-}
-
-class MockFunctionWithoutDefaultReturn<A: Equatable, B: Equatable, ReturnType>: _MockFunction<A, B, ReturnType> {
-    override init(bindings: Bindings) { // FIXME: why is this needed?
-        super.init(bindings: bindings)
-    }
-
-    func orElse(defaultReturn: ReturnType) -> MockFunction<A, B, ReturnType> {
-        return MockFunction<A, B, ReturnType>(bindings: self.bindings, defaultReturn: defaultReturn)
-    }
 }
 
 // MARK: Bindings
