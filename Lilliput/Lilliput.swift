@@ -132,6 +132,34 @@ class Binding<A: Equatable, B: Equatable> {
     }
 }
 
+// MARK: Any
+
+class AnyArgument<T> {}
+
+func any<T>(t: T.Type) -> AnyArgument<T> {
+    return AnyArgument<T>()
+}
+
+class _Binding<A> {
+    let realSelf: A?
+    let anySelf: AnyArgument<A>?
+
+    static func valueOrAnyArgument(a: Any) -> (A?, AnyArgument<A>?) {
+        var value: A? = nil
+        var any: AnyArgument<A>? = nil
+        if let a = a as? AnyArgument<A> {
+            any = a
+        } else if let a = a as? A {
+            value = a
+        }
+        return (value, any)
+    }
+
+    init(_ a: Any) {
+        (realSelf, anySelf) = self.dynamicType.valueOrAnyArgument(a)
+    }
+}
+
 // MARK: Syntactic Sugar
 
 func when<A: Equatable, B: Equatable>(argA: A, argB: B) -> Binding<A, B> {

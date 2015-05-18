@@ -10,6 +10,7 @@
 		5A487C6B1AF280FB0002908D /* Lilliput.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A487C6A1AF280FB0002908D /* Lilliput.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5A487C711AF280FB0002908D /* Lilliput.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A487C651AF280FB0002908D /* Lilliput.framework */; };
 		5A487C781AF280FB0002908D /* Lilliput1ArgumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A487C771AF280FB0002908D /* Lilliput1ArgumentTests.swift */; };
+		E02440651B08CCBC003D3952 /* BindingImplementationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02440641B08CCBC003D3952 /* BindingImplementationTests.swift */; };
 		E04FE0081B068DA9003A6ED6 /* DefaultConstructible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */; };
 		E04FE00B1B068E04003A6ED6 /* DefaultConstructibleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */; };
 		E0ACD8A01B06ED1700AAFD73 /* Lilliput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACD89F1B06ED1700AAFD73 /* Lilliput.swift */; };
@@ -33,6 +34,7 @@
 		5A487C701AF280FB0002908D /* LilliputTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LilliputTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A487C761AF280FB0002908D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A487C771AF280FB0002908D /* Lilliput1ArgumentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lilliput1ArgumentTests.swift; sourceTree = "<group>"; };
+		E02440641B08CCBC003D3952 /* BindingImplementationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingImplementationTests.swift; sourceTree = "<group>"; };
 		E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultConstructible.swift; sourceTree = "<group>"; };
 		E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultConstructibleExtensions.swift; sourceTree = "<group>"; };
 		E0ACD89F1B06ED1700AAFD73 /* Lilliput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lilliput.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			children = (
 				5A487C771AF280FB0002908D /* Lilliput1ArgumentTests.swift */,
 				E0AF77911B07C4830000A80C /* Lilliput2ArgumentTests.swift */,
+				E02440641B08CCBC003D3952 /* BindingImplementationTests.swift */,
 				5A487C751AF280FB0002908D /* Supporting Files */,
 			);
 			path = LilliputTests;
@@ -228,6 +231,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E02440651B08CCBC003D3952 /* BindingImplementationTests.swift in Sources */,
 				E04FE00B1B068E04003A6ED6 /* DefaultConstructibleExtensions.swift in Sources */,
 				E0AF77921B07C4830000A80C /* Lilliput2ArgumentTests.swift in Sources */,
 				E0ACD8A01B06ED1700AAFD73 /* Lilliput.swift in Sources */,
