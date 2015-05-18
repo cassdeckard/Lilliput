@@ -58,7 +58,7 @@ class MockFunction<A: Equatable, B:Equatable, ReturnType>: _MockFunction<A, B, R
 }
 
 class MockFunctionUsingDefaultConstructorForReturn<A: Equatable, B: Equatable, ReturnType: DefaultConstructible>: MockFunction<A, B, ReturnType> {
-    init(bindings: Bindings) {
+    init(bindings: Bindings = []) {
         super.init(bindings: bindings, defaultReturn: ReturnType())
     }
 }
@@ -140,6 +140,21 @@ func when<A: Equatable, B: Equatable>(argA: A, argB: B) -> Binding<A, B> {
 
 func when<A: Equatable>(argA: A) -> Binding<A, NoArgument> {
     return Binding(argA, NoArgument())
+}
+
+class MockBuilder<A: Equatable, B: Equatable> {}
+
+infix operator --> { associativity left }
+func --> <A: Equatable, B: Equatable, ReturnType>(lhs: MockBuilder<A, B>, rhs: ReturnType.Type) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
+    return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>()
+}
+
+func mock<A: Equatable, B: Equatable>(a: A.Type, b: B.Type) -> MockBuilder<A, B> {
+    return MockBuilder<A, B>()
+}
+
+func mock<A: Equatable>(a: A.Type) -> MockBuilder<A, NoArgument> {
+    return MockBuilder<A, NoArgument>()
 }
 
 extension XCTestCase {

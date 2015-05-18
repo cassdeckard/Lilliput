@@ -51,6 +51,10 @@ class Lilliput2ArgumentTests: XCTestCase {
         XCTAssertEqual(defaultResult, "")
     }
 
+    func test_mockBuilderSyntax() {
+        let aMock = mock(String.self, String.self)-->String.self
+    }
+
     // ReturnType tests
 
     func test_returnType_canBeNotDefaultConstructable_ifDefaultIsProvided() {
