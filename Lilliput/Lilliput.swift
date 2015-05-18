@@ -87,7 +87,7 @@ class MockFunction<A: Equatable, B:Equatable, ReturnType>: _MockFunction<A, B, R
         super.init(bindings: bindings)
     }
 
-    func when(argA: A, _ argB: B) -> Binding<A, B> {
+    func when(argA: Any, _ argB: Any) -> Binding<A, B> {
         return Binding(argA, argB, mock: self)
     }
 
@@ -139,12 +139,12 @@ class Binding<A: Equatable, B: Equatable> {
     let boundArgumentA: _Binding<A>
     let boundArgumentB: _Binding<B>
 
-    init(_ argA: A, _ argB: B) {
+    init(_ argA: Any, _ argB: Any) {
         boundArgumentA = _Binding<A>(argA)
         boundArgumentB = _Binding<B>(argB)
     }
 
-    convenience init(_ argA: A, _ argB: B, mock: Mock) {
+    convenience init(_ argA: Any, _ argB: Any, mock: Mock) {
         self.init(argA, argB)
         self.mock = mock
     }
