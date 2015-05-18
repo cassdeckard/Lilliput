@@ -91,7 +91,7 @@ class MockFunction<A: Equatable, B:Equatable, ReturnType>: _MockFunction<A, B, R
         return Binding(argA, argB, mock: self)
     }
 
-    func when(argA: A) -> Binding<A, NoArgument> {
+    func when(argA: Any) -> Binding<A, NoArgument> {
         return Binding(argA, NoArgument(), mock: self)
     }
 }
