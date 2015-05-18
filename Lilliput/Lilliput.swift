@@ -20,6 +20,34 @@ func ==<T: Equatable>(lhs: ArgumentBinder<T>, rhs: T) -> Bool {
     return lhs.arg == rhs
 }
 
+// MARK: Any
+
+class AnyArgument<T> {}
+
+func any<T>(t: T.Type) -> AnyArgument<T> {
+    return AnyArgument<T>()
+}
+
+class _Binding<A: Equatable> {
+    let realSelf: ArgumentBinder<A>?
+    let anySelf: AnyArgument<A>?
+
+    static func valueOrAnyArgument(a: Any) -> (ArgumentBinder<A>?, AnyArgument<A>?) {
+        var value: ArgumentBinder<A>? = nil
+        var any: AnyArgument<A>? = nil
+        if let a = a as? AnyArgument<A> {
+            any = a
+        } else if let a = a as? A {
+            value = ArgumentBinder<A>(a)
+        }
+        return (value, any)
+    }
+
+    init(_ a: Any) {
+        (realSelf, anySelf) = self.dynamicType.valueOrAnyArgument(a)
+    }
+}
+
 // MARK: MockFunction
 
 class _MockFunction<A: Equatable, B: Equatable, ReturnType>: Mock {
@@ -129,34 +157,6 @@ class Binding<A: Equatable, B: Equatable> {
     func matches(argA: A, _ argB: B) -> Bool {
         return boundArgumentA.arg == argA &&
                boundArgumentB.arg == argB
-    }
-}
-
-// MARK: Any
-
-class AnyArgument<T> {}
-
-func any<T>(t: T.Type) -> AnyArgument<T> {
-    return AnyArgument<T>()
-}
-
-class _Binding<A: Equatable> {
-    let realSelf: ArgumentBinder<A>?
-    let anySelf: AnyArgument<A>?
-
-    static func valueOrAnyArgument(a: Any) -> (ArgumentBinder<A>?, AnyArgument<A>?) {
-        var value: ArgumentBinder<A>? = nil
-        var any: AnyArgument<A>? = nil
-        if let a = a as? AnyArgument<A> {
-            any = a
-        } else if let a = a as? A {
-            value = ArgumentBinder<A>(a)
-        }
-        return (value, any)
-    }
-
-    init(_ a: Any) {
-        (realSelf, anySelf) = self.dynamicType.valueOrAnyArgument(a)
     }
 }
 
