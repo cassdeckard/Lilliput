@@ -54,7 +54,7 @@ class Lilliput1ArgumentTests: XCTestCase {
     }
 
     func test_mockBuilderSyntax() {
-        let aMock = mock(String.self)-->String.self
+        let aMock = mock(String).returning(String)
     }
 
     // ReturnType tests

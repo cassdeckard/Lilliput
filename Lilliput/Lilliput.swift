@@ -142,11 +142,10 @@ func when<A: Equatable>(argA: A) -> Binding<A, NoArgument> {
     return Binding(argA, NoArgument())
 }
 
-class MockBuilder<A: Equatable, B: Equatable> {}
-
-infix operator --> { associativity left }
-func --> <A: Equatable, B: Equatable, ReturnType>(lhs: MockBuilder<A, B>, rhs: ReturnType.Type) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
+class MockBuilder<A: Equatable, B: Equatable> {
+    func returning<ReturnType>(returnType: ReturnType.Type) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
     return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>()
+    }
 }
 
 func mock<A: Equatable, B: Equatable>(a: A.Type, b: B.Type) -> MockBuilder<A, B> {
