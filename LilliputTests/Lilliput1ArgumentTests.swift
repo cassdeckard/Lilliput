@@ -57,6 +57,20 @@ class Lilliput1ArgumentTests: XCTestCase {
         let aMock = mock(String).returning(String)
     }
 
+    func test_any() {
+        let mockStringFilter = mock(String).returning(String)
+        mockStringFilter.when("foo").then("bar")
+        mockStringFilter.when(any(String)).then("baz")
+        let testObject = TestClass(stringFilter: unbox(mockStringFilter))
+
+        let result1 = testObject.useStringFilter("foo")
+        let resultAny = testObject.useStringFilter("NOT FOO")
+
+        verifyAtLeastOnce(mockStringFilter)
+        XCTAssertEqual(result1, "bar")
+        XCTAssertEqual(resultAny, "baz")
+    }
+
     // ReturnType tests
 
     func test_returnType_canBeNotDefaultConstructable_ifDefaultIsProvided() {

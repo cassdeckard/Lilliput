@@ -10,7 +10,7 @@ func ==(lhs: NoArgument, rhs: NoArgument) -> Bool {
 }
 
 class ArgumentBinder<T: Equatable> {
-    let arg: T?
+    let arg: T
     init(_ arg: T) {
         self.arg = arg
     }
@@ -18,6 +18,45 @@ class ArgumentBinder<T: Equatable> {
 
 func ==<T: Equatable>(lhs: ArgumentBinder<T>, rhs: T) -> Bool {
     return lhs.arg == rhs
+}
+
+// MARK: Any
+
+class AnyArgument<T> {}
+
+func any<T>(t: T.Type) -> AnyArgument<T> {
+    return AnyArgument<T>()
+}
+
+class _Binding<A: Equatable> {
+    let realSelf: ArgumentBinder<A>?
+    let anySelf: AnyArgument<A>?
+
+    static func valueOrAnyArgument(a: Any) -> (ArgumentBinder<A>?, AnyArgument<A>?) {
+        var value: ArgumentBinder<A>? = nil
+        var any: AnyArgument<A>? = nil
+        if let a = a as? AnyArgument<A> {
+            any = a
+        } else if let a = a as? A {
+            value = ArgumentBinder<A>(a)
+        }
+        return (value, any)
+    }
+
+    init(_ a: Any) {
+        (realSelf, anySelf) = self.dynamicType.valueOrAnyArgument(a)
+    }
+
+    func matches(a: A) -> Bool {
+        var result = false
+        if let realSelf = realSelf {
+            result = (realSelf.arg == a)
+        }
+        if let anySelf = anySelf {
+            result = true
+        }
+        return result
+    }
 }
 
 // MARK: MockFunction
@@ -48,11 +87,11 @@ class MockFunction<A: Equatable, B:Equatable, ReturnType>: _MockFunction<A, B, R
         super.init(bindings: bindings)
     }
 
-    func when(argA: A, _ argB: B) -> Binding<A, B> {
+    func when(argA: Any, _ argB: Any) -> Binding<A, B> {
         return Binding(argA, argB, mock: self)
     }
 
-    func when(argA: A) -> Binding<A, NoArgument> {
+    func when(argA: Any) -> Binding<A, NoArgument> {
         return Binding(argA, NoArgument(), mock: self)
     }
 }
@@ -97,15 +136,15 @@ func unbox<A: Equatable, ReturnType>(mock: MockFunction<A, NoArgument, ReturnTyp
 
 class Binding<A: Equatable, B: Equatable> {
     var mock: Mock?
-    let boundArgumentA: ArgumentBinder<A>
-    let boundArgumentB: ArgumentBinder<B>
+    let boundArgumentA: _Binding<A>
+    let boundArgumentB: _Binding<B>
 
-    init(_ argA: A, _ argB: B) {
-        boundArgumentA = ArgumentBinder<A>(argA)
-        boundArgumentB = ArgumentBinder<B>(argB)
+    init(_ argA: Any, _ argB: Any) {
+        boundArgumentA = _Binding<A>(argA)
+        boundArgumentB = _Binding<B>(argB)
     }
 
-    convenience init(_ argA: A, _ argB: B, mock: Mock) {
+    convenience init(_ argA: Any, _ argB: Any, mock: Mock) {
         self.init(argA, argB)
         self.mock = mock
     }
@@ -127,8 +166,8 @@ class Binding<A: Equatable, B: Equatable> {
     }
 
     func matches(argA: A, _ argB: B) -> Bool {
-        return boundArgumentA.arg == argA &&
-               boundArgumentB.arg == argB
+        return boundArgumentA.matches(argA) &&
+               boundArgumentB.matches(argB)
     }
 }
 
