@@ -140,17 +140,17 @@ func any<T>(t: T.Type) -> AnyArgument<T> {
     return AnyArgument<T>()
 }
 
-class _Binding<A> {
-    let realSelf: A?
+class _Binding<A: Equatable> {
+    let realSelf: ArgumentBinder<A>?
     let anySelf: AnyArgument<A>?
 
-    static func valueOrAnyArgument(a: Any) -> (A?, AnyArgument<A>?) {
-        var value: A? = nil
+    static func valueOrAnyArgument(a: Any) -> (ArgumentBinder<A>?, AnyArgument<A>?) {
+        var value: ArgumentBinder<A>? = nil
         var any: AnyArgument<A>? = nil
         if let a = a as? AnyArgument<A> {
             any = a
         } else if let a = a as? A {
-            value = a
+            value = ArgumentBinder<A>(a)
         }
         return (value, any)
     }
