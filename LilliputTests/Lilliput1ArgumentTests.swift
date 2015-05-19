@@ -53,8 +53,14 @@ class Lilliput1ArgumentTests: XCTestCase {
         XCTAssertEqual(defaultResult, "")
     }
 
-    func test_mockBuilderSyntax() {
+    func test_mockBuilder_createsMockWithNoMatchers() {
         let aMock = mock(String).returning(String)
+        XCTAssertEqual(unbox(aMock)("foo"), "")
+    }
+
+    func test_mockBuilder_withNonDefaultConstructibleReturn_createsMockWithNoMatchers() {
+        let aMock = mock(String).returning(Int).orElse(24)
+        XCTAssertEqual(unbox(aMock)("foo"), 24)
     }
 
     func test_any() {
