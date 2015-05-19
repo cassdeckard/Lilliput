@@ -103,7 +103,7 @@ class MockFunctionUsingDefaultConstructorForReturn<A: Equatable, B: Equatable, R
 }
 
 class MockFunctionWithoutDefaultReturn<A: Equatable, B: Equatable, ReturnType>: _MockFunction<A, B, ReturnType> {
-    override init(bindings: Bindings) { // FIXME: why is this needed?
+    override init(bindings: Bindings = []) { // FIXME: why is this needed?
         super.init(bindings: bindings)
     }
 
@@ -182,8 +182,13 @@ func when<A: Equatable>(argA: A) -> Binding<A, NoArgument> {
 }
 
 class MockBuilder<A: Equatable, B: Equatable> {
-    func returning<ReturnType>(returnType: ReturnType.Type) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
+    func returning<ReturnType: DefaultConstructible>(returnType: ReturnType.Type) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
     return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>()
+    }
+
+
+    func returning<ReturnType>(returnType: ReturnType.Type) -> MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
+        return MockFunctionWithoutDefaultReturn<A, B, ReturnType>()
     }
 }
 
