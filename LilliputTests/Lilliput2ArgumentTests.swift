@@ -72,7 +72,7 @@ class Lilliput2ArgumentTests: XCTestCase {
 
     // ReturnType tests
 
-    func test_returnType_canBeNotDefaultConstructable_ifDefaultIsProvided() {
+    func test_returnType_canBeNotDefaultConstructible_ifDefaultIsProvided() {
         let mockStringsToInt = when("foo", "bar").then(1).orElse(2)
 
         let testObject = TestClass(stringsToInt: unbox(mockStringsToInt))
