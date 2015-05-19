@@ -54,13 +54,13 @@ XCTAssertEqual(result1, "bar")
 XCTAssertEqual(resultAny, "baz")
 XCTAssertEqual(defaultResult, "")
 
-// Unfortunately there is currently a limitation where mocks with an any() argument cannot be constructed
-// with when() syntax. So you may need to use the "mock builder" syntax to construct a mock with no
-// matchers first:
+// Unfortunately there is currently a limitation where mocks with an any() argument
+// cannot be constructed with when() syntax. So you may need to use the "mock builder"
+// syntax to construct a mock with no matchers first:
 let mockStringFilter = mock(String).returning(String)
 mockStringFilter.when(any(String)).then("I got some string!")
 
-// Unfortunately there is currently a limitation in the "mock builder" syntax requiring the use of ".self"
-// for the argument types for more than one argument
+// Unfortunately there is currently a limitation in the "mock builder" syntax
+// requiring the use of ".self" for the argument types for more than one argument
 let mockWithTwoArgs = mock(String.self, Int.self).returning(String)
 ```
