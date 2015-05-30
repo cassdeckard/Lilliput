@@ -57,6 +57,10 @@ class _Binding<A: Equatable> {
         }
         return result
     }
+
+    func isValid() -> Bool {
+        return realSelf != nil || anySelf != nil
+    }
 }
 
 // MARK: MockFunction
@@ -67,9 +71,11 @@ class _MockFunction<A: Equatable, B: Equatable, ReturnType>: Mock {
     typealias TBinding = Binding<A, B>
     typealias Bindings = [(TBinding, ReturnType)]
 
+    let testCase: XCTestCase
     var bindings: Bindings
 
-    init(bindings: Bindings) {
+    init(testCase: XCTestCase, bindings: Bindings) {
+        self.testCase = testCase
         self.bindings = bindings
     }
 
@@ -82,33 +88,33 @@ class MockFunction<A: Equatable, B:Equatable, ReturnType>: _MockFunction<A, B, R
     var invocationCount = 0
     let defaultReturn: ReturnType
 
-    init(bindings: Bindings, defaultReturn: ReturnType) {
+    init(testCase: XCTestCase, bindings: Bindings, defaultReturn: ReturnType) {
         self.defaultReturn = defaultReturn
-        super.init(bindings: bindings)
+        super.init(testCase: testCase, bindings: bindings)
     }
 
     func when(argA: Any, _ argB: Any) -> Binding<A, B> {
-        return Binding(argA, argB, mock: self)
+        return Binding(testCase: self.testCase, argA, argB, mock: self)
     }
 
     func when(argA: Any) -> Binding<A, NoArgument> {
-        return Binding(argA, NoArgument(), mock: self)
+        return Binding(testCase: self.testCase, argA, NoArgument(), mock: self)
     }
 }
 
 class MockFunctionUsingDefaultConstructorForReturn<A: Equatable, B: Equatable, ReturnType: DefaultConstructible>: MockFunction<A, B, ReturnType> {
-    init(bindings: Bindings = []) {
-        super.init(bindings: bindings, defaultReturn: ReturnType())
+    init(testCase: XCTestCase, bindings: Bindings = []) {
+        super.init(testCase: testCase, bindings: bindings, defaultReturn: ReturnType())
     }
 }
 
 class MockFunctionWithoutDefaultReturn<A: Equatable, B: Equatable, ReturnType>: _MockFunction<A, B, ReturnType> {
-    override init(bindings: Bindings = []) { // FIXME: why is this needed?
-        super.init(bindings: bindings)
+    override init(testCase: XCTestCase, bindings: Bindings = []) { // FIXME: why is this needed?
+        super.init(testCase: testCase, bindings: bindings)
     }
 
     func orElse(defaultReturn: ReturnType) -> MockFunction<A, B, ReturnType> {
-        return MockFunction<A, B, ReturnType>(bindings: self.bindings, defaultReturn: defaultReturn)
+        return MockFunction<A, B, ReturnType>(testCase: self.testCase, bindings: self.bindings, defaultReturn: defaultReturn)
     }
 }
 
@@ -136,16 +142,19 @@ func unbox<A: Equatable, ReturnType>(mock: MockFunction<A, NoArgument, ReturnTyp
 
 class Binding<A: Equatable, B: Equatable> {
     var mock: Mock?
+    let testCase: XCTestCase
     let boundArgumentA: _Binding<A>
     let boundArgumentB: _Binding<B>
 
-    init(_ argA: Any, _ argB: Any) {
+    init(testCase: XCTestCase, _ argA: Any, _ argB: Any) {
+        self.testCase = testCase
         boundArgumentA = _Binding<A>(argA)
         boundArgumentB = _Binding<B>(argB)
+        testCase.verifyBoundArgumentsAreValid(self)
     }
 
-    convenience init(_ argA: Any, _ argB: Any, mock: Mock) {
-        self.init(argA, argB)
+    convenience init(testCase: XCTestCase, _ argA: Any, _ argB: Any, mock: Mock) {
+        self.init(testCase: testCase, argA, argB)
         self.mock = mock
     }
 
@@ -154,7 +163,7 @@ class Binding<A: Equatable, B: Equatable> {
             mock.addBinding(binding: self, returnValue: returnValue)
             return mock
         }
-        return MockFunctionWithoutDefaultReturn<A, B, ReturnType>(bindings: [(self, returnValue)])
+        return MockFunctionWithoutDefaultReturn<A, B, ReturnType>(testCase: testCase, bindings: [(self, returnValue)])
     }
 
     func then<ReturnType>(returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
@@ -162,45 +171,60 @@ class Binding<A: Equatable, B: Equatable> {
             mock.addBinding(binding: self, returnValue: returnValue)
             return mock
         }
-        return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>(bindings: [(self, returnValue)])
+        return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>(testCase: testCase, bindings: [(self, returnValue)])
     }
 
     func matches(argA: A, _ argB: B) -> Bool {
         return boundArgumentA.matches(argA) &&
-               boundArgumentB.matches(argB)
+            boundArgumentB.matches(argB)
     }
 }
 
 // MARK: Syntactic Sugar
 
-func when<A: Equatable, B: Equatable>(argA: A, argB: B) -> Binding<A, B> {
-    return Binding(argA, argB)
-}
-
-func when<A: Equatable>(argA: A) -> Binding<A, NoArgument> {
-    return Binding(argA, NoArgument())
-}
-
 class MockBuilder<A: Equatable, B: Equatable> {
+    let testCase: XCTestCase
+
+    init(testCase: XCTestCase) {
+        self.testCase = testCase
+    }
+
     func returning<ReturnType: DefaultConstructible>(returnType: ReturnType.Type) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
-    return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>()
+        return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>(testCase: self.testCase)
     }
 
 
     func returning<ReturnType>(returnType: ReturnType.Type) -> MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
-        return MockFunctionWithoutDefaultReturn<A, B, ReturnType>()
+        return MockFunctionWithoutDefaultReturn<A, B, ReturnType>(testCase: self.testCase)
     }
 }
 
-func mock<A: Equatable, B: Equatable>(a: A.Type, b: B.Type) -> MockBuilder<A, B> {
-    return MockBuilder<A, B>()
-}
-
-func mock<A: Equatable>(a: A.Type) -> MockBuilder<A, NoArgument> {
-    return MockBuilder<A, NoArgument>()
-}
-
 extension XCTestCase {
+    func mock<A: Equatable, B: Equatable>(a: A.Type, _ b: B.Type) -> MockBuilder<A, B> {
+        return MockBuilder<A, B>(testCase: self)
+    }
+
+    func mock<A: Equatable>(a: A.Type) -> MockBuilder<A, NoArgument> {
+        return MockBuilder<A, NoArgument>(testCase: self)
+    }
+
+    func when<A: Equatable, B: Equatable>(argA: A, _ argB: B) -> Binding<A, B> {
+        return Binding(testCase: self, argA, argB)
+    }
+
+    func when<A: Equatable>(argA: A) -> Binding<A, NoArgument> {
+        return Binding(testCase: self, argA, NoArgument())
+    }
+
+    func verifyBoundArgumentsAreValid<A: Equatable, B: Equatable>(binding: Binding<A, B>,
+        inFile filePath: String = __FILE__,
+        atLine lineNumber: UInt = __LINE__) -> () {
+            if !(binding.boundArgumentA.isValid() &&
+                binding.boundArgumentB.isValid()) {
+                    self.recordFailureWithDescription("One or more bound arguments is not valid", inFile: filePath, atLine: lineNumber, expected: true)
+            }
+    }
+
     func verifyNever<A: Equatable, B: Equatable, ReturnType>(mockFunc: MockFunction<A, B, ReturnType>,
         inFile filePath: String = __FILE__,
         atLine lineNumber: UInt = __LINE__) -> () {
