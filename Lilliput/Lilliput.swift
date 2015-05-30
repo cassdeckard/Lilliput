@@ -57,6 +57,10 @@ class _Binding<A: Equatable> {
         }
         return result
     }
+
+    func isValid() -> Bool {
+        return realSelf != nil || anySelf != nil
+    }
 }
 
 // MARK: MockFunction
@@ -146,6 +150,7 @@ class Binding<A: Equatable, B: Equatable> {
         self.testCase = testCase
         boundArgumentA = _Binding<A>(argA)
         boundArgumentB = _Binding<B>(argB)
+        testCase.verifyBoundArgumentsAreValid(self)
     }
 
     convenience init(testCase: XCTestCase, _ argA: Any, _ argB: Any, mock: Mock) {
@@ -209,6 +214,15 @@ extension XCTestCase {
 
     func when<A: Equatable>(argA: A) -> Binding<A, NoArgument> {
         return Binding(testCase: self, argA, NoArgument())
+    }
+
+    func verifyBoundArgumentsAreValid<A: Equatable, B: Equatable>(binding: Binding<A, B>,
+        inFile filePath: String = __FILE__,
+        atLine lineNumber: UInt = __LINE__) -> () {
+            if !(binding.boundArgumentA.isValid() &&
+                binding.boundArgumentB.isValid()) {
+                    self.recordFailureWithDescription("One or more bound arguments is not valid", inFile: filePath, atLine: lineNumber, expected: true)
+            }
     }
 
     func verifyNever<A: Equatable, B: Equatable, ReturnType>(mockFunc: MockFunction<A, B, ReturnType>,
