@@ -93,12 +93,14 @@ class MockFunction<A: Equatable, B:Equatable, ReturnType>: _MockFunction<A, B, R
         super.init(testCase: testCase, bindings: bindings)
     }
 
-    func when(argA: Any, _ argB: Any) -> Binding<A, B> {
-        return Binding(testCase: self.testCase, argA, argB, mock: self)
+    func when(argA: Any, _ argB: Any) -> MockWithBinding<A, B, ReturnType> {
+        let newBinding = Binding<A, B>(testCase: self.testCase, argA, argB)
+        return MockWithBinding(mock: self, binding: newBinding)
     }
 
-    func when(argA: Any) -> Binding<A, NoArgument> {
-        return Binding(testCase: self.testCase, argA, NoArgument(), mock: self)
+    func when(argA: Any) -> MockWithBinding<A, NoArgument, ReturnType> {
+        let newBinding = Binding<A, NoArgument>(testCase: self.testCase, argA, NoArgument())
+        return MockWithBinding(mock: self, binding: newBinding)
     }
 }
 
@@ -141,7 +143,6 @@ func unbox<A: Equatable, ReturnType>(mock: MockFunction<A, NoArgument, ReturnTyp
 // MARK: Bindings
 
 class Binding<A: Equatable, B: Equatable> {
-    var mock: Mock?
     let testCase: XCTestCase
     let boundArgumentA: _Binding<A>
     let boundArgumentB: _Binding<B>
@@ -153,30 +154,44 @@ class Binding<A: Equatable, B: Equatable> {
         testCase.verifyBoundArgumentsAreValid(self)
     }
 
-    convenience init(testCase: XCTestCase, _ argA: Any, _ argB: Any, mock: Mock) {
-        self.init(testCase: testCase, argA, argB)
-        self.mock = mock
-    }
-
     func then<ReturnType>(returnValue: ReturnType) -> MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
-        if let mock = self.mock as? MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
-            mock.addBinding(binding: self, returnValue: returnValue)
-            return mock
-        }
         return MockFunctionWithoutDefaultReturn<A, B, ReturnType>(testCase: testCase, bindings: [(self, returnValue)])
     }
 
     func then<ReturnType>(returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
-        if let mock = self.mock as? MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
-            mock.addBinding(binding: self, returnValue: returnValue)
-            return mock
-        }
         return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>(testCase: testCase, bindings: [(self, returnValue)])
     }
 
     func matches(argA: A, _ argB: B) -> Bool {
         return boundArgumentA.matches(argA) &&
             boundArgumentB.matches(argB)
+    }
+}
+
+class MockWithBinding<A: Equatable, B: Equatable, ReturnType> {
+    typealias BindingT = Binding<A, B>
+    var mock: Mock
+    var binding: BindingT
+
+    init(mock: Mock, binding: BindingT) {
+        self.binding = binding
+        self.mock = mock
+    }
+
+    func then<ReturnType>(returnValue: ReturnType) -> MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
+        if let mock = self.mock as? MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
+            mock.addBinding(binding: binding, returnValue: returnValue)
+            return mock
+        }
+        return MockFunctionWithoutDefaultReturn<A, B, ReturnType>(testCase: binding.testCase, bindings: [(binding, returnValue)])
+    }
+
+    func then<ReturnType>(returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
+        if let mock = self.mock as? MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
+            mock.addBinding(binding: binding, returnValue: returnValue)
+            return mock
+        }
+        return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>(testCase: binding.testCase, bindings: [(binding, returnValue)])
     }
 }
 
