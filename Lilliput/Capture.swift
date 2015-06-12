@@ -13,3 +13,8 @@ class Capture<A: Equatable> {
 func capture<A: Equatable>(type: A.Type) -> Capture<A> {
     return Capture<A>()
 }
+
+prefix operator * {}
+prefix func *<A: Equatable>(capture: Capture<A>) -> A? {
+    return capture.capturedArgument
+}

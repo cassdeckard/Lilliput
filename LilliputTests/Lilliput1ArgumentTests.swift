@@ -102,8 +102,8 @@ class Lilliput1ArgumentTests: XCTestCase {
 
         verifyAtLeastOnce(mockStringToInt)
         XCTAssertEqual(result, 12)
-        XCTAssertNotNil(captureString.capturedArgument)
-        if let string = captureString.capturedArgument {
+        XCTAssertNotNil(*captureString)
+        if let string = *captureString {
             XCTAssertEqual(string, "foo")
         }
     }

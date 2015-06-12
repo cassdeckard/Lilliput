@@ -101,8 +101,8 @@ class Lilliput2ArgumentTests: XCTestCase {
 
         verifyAtLeastOnce(mockStringsToInt)
         XCTAssertEqual(result, 12)
-        XCTAssertNotNil(captureString.capturedArgument)
-        if let string = captureString.capturedArgument {
+        XCTAssertNotNil(*captureString)
+        if let string = *captureString {
             XCTAssertEqual(string, "foo")
         }
     }
@@ -116,7 +116,7 @@ class Lilliput2ArgumentTests: XCTestCase {
 
         verifyAtLeastOnce(mockStringsToInt)
         XCTAssertEqual(result, 0)
-        XCTAssertNil(captureString.capturedArgument)
+        XCTAssertNil(*captureString)
     }
 
     // ReturnType tests
