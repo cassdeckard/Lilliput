@@ -15,12 +15,4 @@ class MockWithBinding<A: Equatable, B: Equatable, ReturnType> {
         mockFunction.addBinding(binding: binding, returnValue: returnValue)
         return mockFunction
     }
-
-    func then<ReturnType>(returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
-        if let mock = self.mock as? MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
-            mock.addBinding(binding: binding, returnValue: returnValue)
-            return mock
-        }
-        return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>(testCase: binding.testCase, bindings: [(binding, returnValue)])
-    }
 }
