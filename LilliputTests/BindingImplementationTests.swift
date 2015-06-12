@@ -2,8 +2,9 @@ import XCTest
 
 class BindingImplementationTests: XCTestCase {
 
+    // We only care that this compiles
     func test_bindingImplCanBeInitializedWithRealOrAnyWrappedType() {
-        let fakeBinding = _Binding<Int>(2)
-        let fakeAnyBinding = _Binding<Int>(any(Int))
+        _ = _Binding<Int>(2)
+        _ = _Binding<Int>(any(Int))
     }
 }

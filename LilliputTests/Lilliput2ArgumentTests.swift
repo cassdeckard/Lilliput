@@ -102,14 +102,14 @@ class Lilliput2ArgumentTests: XCTestCase {
         verifyAtLeastOnce(mockStringIntToString)
         XCTAssertEqual(foo42Result, "bar")
         XCTAssertEqual(defaultResult1, "baz")
-        XCTAssertEqual(defaultResult1, "baz")
+        XCTAssertEqual(defaultResult2, "baz")
     }
 
     // Verify tests
 
     func test_verifyNever_succeedsWhenMockIsNeverInvoked() {
         let mockStringIntToString = when("foo", 42).then("bar")
-        let testObject = TestClass(stringIntToString: unbox(mockStringIntToString))
+        _ = TestClass(stringIntToString: unbox(mockStringIntToString))
         
         verifyNever(mockStringIntToString)
     }

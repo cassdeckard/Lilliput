@@ -52,7 +52,7 @@ class _Binding<A: Equatable> {
         if let realSelf = realSelf {
             result = (realSelf.arg == a)
         }
-        if let anySelf = anySelf {
+        if let _ = anySelf {
             result = true
         }
         return result
@@ -79,7 +79,7 @@ class _MockFunction<A: Equatable, B: Equatable, ReturnType>: Mock {
         self.bindings = bindings
     }
 
-    func addBinding(#binding: TBinding, returnValue: ReturnType) {
+    func addBinding(binding binding: TBinding, returnValue: ReturnType) {
         self.bindings.append((binding, returnValue))
     }
 }
@@ -131,11 +131,11 @@ func _unbox<A: Equatable, B: Equatable, ReturnType>(mock: MockFunction<A, B, Ret
 }
 
 func unbox<A: Equatable, B: Equatable, ReturnType>(mock: MockFunction<A, B, ReturnType>) -> MockFunction<A, B, ReturnType>.Signature {
-    return { _unbox(mock, $0, $1) }
+    return { _unbox(mock, argA: $0, argB: $1) }
 }
 
 func unbox<A: Equatable, ReturnType>(mock: MockFunction<A, NoArgument, ReturnType>) -> MockFunction<A, NoArgument, ReturnType>.Signature_ {
-    return { _unbox(mock, $0, NoArgument()) }
+    return { _unbox(mock, argA: $0, argB: NoArgument()) }
 }
 
 // MARK: Bindings

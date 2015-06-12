@@ -107,7 +107,7 @@ class Lilliput1ArgumentTests: XCTestCase {
 
     func test_verifyNever_succeedsWhenMockIsNeverInvoked() {
         let mockStringFilter = when("foo").then("bar")
-        let testObject = TestClass(stringFilter: unbox(mockStringFilter))
+        let _ = TestClass(stringFilter: unbox(mockStringFilter))
 
         verifyNever(mockStringFilter)
     }
