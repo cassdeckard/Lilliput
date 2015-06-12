@@ -13,7 +13,14 @@
 		E02440651B08CCBC003D3952 /* BindingImplementationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02440641B08CCBC003D3952 /* BindingImplementationTests.swift */; };
 		E04FE0081B068DA9003A6ED6 /* DefaultConstructible.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */; };
 		E04FE00B1B068E04003A6ED6 /* DefaultConstructibleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */; };
-		E0ACD8A01B06ED1700AAFD73 /* Lilliput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACD89F1B06ED1700AAFD73 /* Lilliput.swift */; };
+		E0ABC5231B2B077100AAC029 /* NoArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC5211B2B075000AAC029 /* NoArgument.swift */; };
+		E0ABC5251B2B07A200AAC029 /* ArgumentBinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC5241B2B07A200AAC029 /* ArgumentBinder.swift */; };
+		E0ABC5271B2B07E700AAC029 /* AnyArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC5261B2B07E700AAC029 /* AnyArgument.swift */; };
+		E0ABC5291B2B082700AAC029 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC5281B2B082700AAC029 /* Binding.swift */; };
+		E0ABC52B1B2B08A100AAC029 /* MockWithBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC52A1B2B08A100AAC029 /* MockWithBinding.swift */; };
+		E0ABC52D1B2B08E300AAC029 /* MockFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC52C1B2B08E300AAC029 /* MockFunction.swift */; };
+		E0ABC52F1B2B094300AAC029 /* MockBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC52E1B2B094300AAC029 /* MockBuilder.swift */; };
+		E0ACD8A01B06ED1700AAFD73 /* XCTestCaseExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACD89F1B06ED1700AAFD73 /* XCTestCaseExtensions.swift */; };
 		E0AF77921B07C4830000A80C /* Lilliput2ArgumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AF77911B07C4830000A80C /* Lilliput2ArgumentTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,7 +44,14 @@
 		E02440641B08CCBC003D3952 /* BindingImplementationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindingImplementationTests.swift; sourceTree = "<group>"; };
 		E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultConstructible.swift; sourceTree = "<group>"; };
 		E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultConstructibleExtensions.swift; sourceTree = "<group>"; };
-		E0ACD89F1B06ED1700AAFD73 /* Lilliput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lilliput.swift; sourceTree = "<group>"; };
+		E0ABC5211B2B075000AAC029 /* NoArgument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoArgument.swift; sourceTree = "<group>"; };
+		E0ABC5241B2B07A200AAC029 /* ArgumentBinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentBinder.swift; sourceTree = "<group>"; };
+		E0ABC5261B2B07E700AAC029 /* AnyArgument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyArgument.swift; sourceTree = "<group>"; };
+		E0ABC5281B2B082700AAC029 /* Binding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
+		E0ABC52A1B2B08A100AAC029 /* MockWithBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockWithBinding.swift; sourceTree = "<group>"; };
+		E0ABC52C1B2B08E300AAC029 /* MockFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFunction.swift; sourceTree = "<group>"; };
+		E0ABC52E1B2B094300AAC029 /* MockBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockBuilder.swift; path = ../MockBuilder.swift; sourceTree = "<group>"; };
+		E0ACD89F1B06ED1700AAFD73 /* XCTestCaseExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestCaseExtensions.swift; sourceTree = "<group>"; };
 		E0AF77911B07C4830000A80C /* Lilliput2ArgumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lilliput2ArgumentTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -81,10 +95,16 @@
 		5A487C671AF280FB0002908D /* Lilliput */ = {
 			isa = PBXGroup;
 			children = (
+				E00FD0FA1B2B0E2800F64819 /* Protocols */,
+				E0ABC5301B2B0BF000AAC029 /* Extensions */,
 				5A487C6A1AF280FB0002908D /* Lilliput.h */,
-				E0ACD89F1B06ED1700AAFD73 /* Lilliput.swift */,
-				E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */,
-				E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */,
+				E0ABC5261B2B07E700AAC029 /* AnyArgument.swift */,
+				E0ABC5241B2B07A200AAC029 /* ArgumentBinder.swift */,
+				E0ABC5281B2B082700AAC029 /* Binding.swift */,
+				E0ABC52E1B2B094300AAC029 /* MockBuilder.swift */,
+				E0ABC52C1B2B08E300AAC029 /* MockFunction.swift */,
+				E0ABC52A1B2B08A100AAC029 /* MockWithBinding.swift */,
+				E0ABC5211B2B075000AAC029 /* NoArgument.swift */,
 				5A487C681AF280FB0002908D /* Supporting Files */,
 			);
 			path = Lilliput;
@@ -115,6 +135,23 @@
 				5A487C761AF280FB0002908D /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E00FD0FA1B2B0E2800F64819 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+		E0ABC5301B2B0BF000AAC029 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E04FE0091B068DE1003A6ED6 /* DefaultConstructibleExtensions.swift */,
+				E0ACD89F1B06ED1700AAFD73 /* XCTestCaseExtensions.swift */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,12 +269,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0ABC5271B2B07E700AAC029 /* AnyArgument.swift in Sources */,
+				E0ABC52F1B2B094300AAC029 /* MockBuilder.swift in Sources */,
+				E0ABC52B1B2B08A100AAC029 /* MockWithBinding.swift in Sources */,
+				E0ABC5231B2B077100AAC029 /* NoArgument.swift in Sources */,
 				E02440651B08CCBC003D3952 /* BindingImplementationTests.swift in Sources */,
 				E04FE00B1B068E04003A6ED6 /* DefaultConstructibleExtensions.swift in Sources */,
 				E0AF77921B07C4830000A80C /* Lilliput2ArgumentTests.swift in Sources */,
-				E0ACD8A01B06ED1700AAFD73 /* Lilliput.swift in Sources */,
+				E0ACD8A01B06ED1700AAFD73 /* XCTestCaseExtensions.swift in Sources */,
 				5A487C781AF280FB0002908D /* Lilliput1ArgumentTests.swift in Sources */,
+				E0ABC5251B2B07A200AAC029 /* ArgumentBinder.swift in Sources */,
+				E0ABC52D1B2B08E300AAC029 /* MockFunction.swift in Sources */,
 				E04FE0081B068DA9003A6ED6 /* DefaultConstructible.swift in Sources */,
+				E0ABC5291B2B082700AAC029 /* Binding.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
