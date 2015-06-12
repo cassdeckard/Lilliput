@@ -33,7 +33,7 @@ class _Binding<A: Equatable> {
             result = true
         }
         if let captureSelf = captureSelf {
-            captureSelf.capturedArgument = a
+            captureSelf._capturedArgument = a
             result = true
         }
         return result
@@ -41,6 +41,12 @@ class _Binding<A: Equatable> {
 
     func isValid() -> Bool {
         return realSelf != nil || anySelf != nil || captureSelf != nil
+    }
+
+    func fullArgumentListMatches(matches: Bool) {
+        if let captureSelf = captureSelf {
+            captureSelf._allowCapture = matches
+        }
     }
 }
 
@@ -65,7 +71,10 @@ class Binding<A: Equatable, B: Equatable> {
     }
 
     func matches(argA: A, _ argB: B) -> Bool {
-        return boundArgumentA.matches(argA) &&
+        let result = boundArgumentA.matches(argA) &&
             boundArgumentB.matches(argB)
+        boundArgumentA.fullArgumentListMatches(result)
+        boundArgumentB.fullArgumentListMatches(result)
+        return result
     }
 }
