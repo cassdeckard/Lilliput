@@ -20,7 +20,7 @@
 		E0ABC52B1B2B08A100AAC029 /* MockWithBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC52A1B2B08A100AAC029 /* MockWithBinding.swift */; };
 		E0ABC52D1B2B08E300AAC029 /* MockFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC52C1B2B08E300AAC029 /* MockFunction.swift */; };
 		E0ABC52F1B2B094300AAC029 /* MockBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC52E1B2B094300AAC029 /* MockBuilder.swift */; };
-		E0ACD8A01B06ED1700AAFD73 /* Lilliput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACD89F1B06ED1700AAFD73 /* Lilliput.swift */; };
+		E0ACD8A01B06ED1700AAFD73 /* XCTestCaseExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACD89F1B06ED1700AAFD73 /* XCTestCaseExtensions.swift */; };
 		E0AF77921B07C4830000A80C /* Lilliput2ArgumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AF77911B07C4830000A80C /* Lilliput2ArgumentTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,7 +51,7 @@
 		E0ABC52A1B2B08A100AAC029 /* MockWithBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockWithBinding.swift; sourceTree = "<group>"; };
 		E0ABC52C1B2B08E300AAC029 /* MockFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFunction.swift; sourceTree = "<group>"; };
 		E0ABC52E1B2B094300AAC029 /* MockBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockBuilder.swift; path = ../MockBuilder.swift; sourceTree = "<group>"; };
-		E0ACD89F1B06ED1700AAFD73 /* Lilliput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lilliput.swift; sourceTree = "<group>"; };
+		E0ACD89F1B06ED1700AAFD73 /* XCTestCaseExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestCaseExtensions.swift; sourceTree = "<group>"; };
 		E0AF77911B07C4830000A80C /* Lilliput2ArgumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lilliput2ArgumentTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,7 +96,6 @@
 			isa = PBXGroup;
 			children = (
 				5A487C6A1AF280FB0002908D /* Lilliput.h */,
-				E0ACD89F1B06ED1700AAFD73 /* Lilliput.swift */,
 				E0ABC5261B2B07E700AAC029 /* AnyArgument.swift */,
 				E0ABC5241B2B07A200AAC029 /* ArgumentBinder.swift */,
 				E0ABC5281B2B082700AAC029 /* Binding.swift */,
@@ -106,6 +105,7 @@
 				E0ABC52C1B2B08E300AAC029 /* MockFunction.swift */,
 				E0ABC52A1B2B08A100AAC029 /* MockWithBinding.swift */,
 				E0ABC5211B2B075000AAC029 /* NoArgument.swift */,
+				E0ACD89F1B06ED1700AAFD73 /* XCTestCaseExtensions.swift */,
 				5A487C681AF280FB0002908D /* Supporting Files */,
 			);
 			path = Lilliput;
@@ -260,7 +260,7 @@
 				E02440651B08CCBC003D3952 /* BindingImplementationTests.swift in Sources */,
 				E04FE00B1B068E04003A6ED6 /* DefaultConstructibleExtensions.swift in Sources */,
 				E0AF77921B07C4830000A80C /* Lilliput2ArgumentTests.swift in Sources */,
-				E0ACD8A01B06ED1700AAFD73 /* Lilliput.swift in Sources */,
+				E0ACD8A01B06ED1700AAFD73 /* XCTestCaseExtensions.swift in Sources */,
 				5A487C781AF280FB0002908D /* Lilliput1ArgumentTests.swift in Sources */,
 				E0ABC5251B2B07A200AAC029 /* ArgumentBinder.swift in Sources */,
 				E0ABC52D1B2B08E300AAC029 /* MockFunction.swift in Sources */,
