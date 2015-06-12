@@ -90,6 +90,35 @@ class Lilliput2ArgumentTests: XCTestCase {
         XCTAssertEqual(defaultResult, "")
     }
 
+    // Capturing
+
+    func test_basic_capture() {
+        let captureString = capture(String)
+        let mockStringsToInt = mock(String.self, String.self).returning(Int).orElse(0)
+        mockStringsToInt.when(captureString, "bar").then(12)
+
+        let result = unbox(mockStringsToInt)("foo", "bar")
+
+        verifyAtLeastOnce(mockStringsToInt)
+        XCTAssertEqual(result, 12)
+        XCTAssertNotNil(*captureString)
+        if let string = *captureString {
+            XCTAssertEqual(string, "foo")
+        }
+    }
+
+    func test_captureArgument_isOnlyCaptured_whenOtherArgumentsMatch() {
+        let captureString = capture(String)
+        let mockStringsToInt = mock(String.self, String.self).returning(Int).orElse(0)
+        mockStringsToInt.when(captureString, "bar").then(12)
+
+        let result = unbox(mockStringsToInt)("foo", "BAR")
+
+        verifyAtLeastOnce(mockStringsToInt)
+        XCTAssertEqual(result, 0)
+        XCTAssertNil(*captureString)
+    }
+
     // ReturnType tests
 
     func test_returnType_canBeNotDefaultConstructible_ifDefaultIsProvided() {

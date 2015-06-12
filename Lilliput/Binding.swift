@@ -4,20 +4,24 @@ import XCTest
 class _Binding<A: Equatable> {
     let realSelf: ArgumentBinder<A>?
     let anySelf: AnyArgument<A>?
+    let captureSelf: Capture<A>?
 
-    static func valueOrAnyArgument(a: Any) -> (ArgumentBinder<A>?, AnyArgument<A>?) {
+    static func valueOrAnyOrCapture(a: Any) -> (ArgumentBinder<A>?, AnyArgument<A>?, Capture<A>?) {
         var value: ArgumentBinder<A>? = nil
         var any: AnyArgument<A>? = nil
+        var capture: Capture<A>? = nil
         if let a = a as? AnyArgument<A> {
             any = a
+        } else if let a = a as? Capture<A> {
+            capture = a
         } else if let a = a as? A {
             value = ArgumentBinder<A>(a)
         }
-        return (value, any)
+        return (value, any, capture)
     }
 
     init(_ a: Any) {
-        (realSelf, anySelf) = self.dynamicType.valueOrAnyArgument(a)
+        (realSelf, anySelf, captureSelf) = self.dynamicType.valueOrAnyOrCapture(a)
     }
 
     func matches(a: A) -> Bool {
@@ -28,11 +32,21 @@ class _Binding<A: Equatable> {
         if let _ = anySelf {
             result = true
         }
+        if let captureSelf = captureSelf {
+            captureSelf._capturedArgument = a
+            result = true
+        }
         return result
     }
 
     func isValid() -> Bool {
-        return realSelf != nil || anySelf != nil
+        return realSelf != nil || anySelf != nil || captureSelf != nil
+    }
+
+    func fullArgumentListMatches(matches: Bool) {
+        if let captureSelf = captureSelf {
+            captureSelf._allowCapture = matches
+        }
     }
 }
 
@@ -57,7 +71,10 @@ class Binding<A: Equatable, B: Equatable> {
     }
 
     func matches(argA: A, _ argB: B) -> Bool {
-        return boundArgumentA.matches(argA) &&
+        let result = boundArgumentA.matches(argA) &&
             boundArgumentB.matches(argB)
+        boundArgumentA.fullArgumentListMatches(result)
+        boundArgumentB.fullArgumentListMatches(result)
+        return result
     }
 }
