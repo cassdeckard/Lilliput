@@ -3,12 +3,6 @@ import XCTest
 
 protocol Mock { }
 
-class NoArgument: Equatable { }
-
-func ==(lhs: NoArgument, rhs: NoArgument) -> Bool {
-    return true
-}
-
 class ArgumentBinder<T: Equatable> {
     let arg: T
     init(_ arg: T) {
