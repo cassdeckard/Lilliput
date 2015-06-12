@@ -3,14 +3,6 @@ import XCTest
 
 protocol Mock { }
 
-// MARK: Any
-
-class AnyArgument<T> {}
-
-func any<T>(t: T.Type) -> AnyArgument<T> {
-    return AnyArgument<T>()
-}
-
 class _Binding<A: Equatable> {
     let realSelf: ArgumentBinder<A>?
     let anySelf: AnyArgument<A>?
