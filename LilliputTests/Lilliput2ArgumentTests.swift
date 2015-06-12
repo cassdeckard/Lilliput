@@ -5,9 +5,11 @@ class Lilliput2ArgumentTests: XCTestCase {
     class TestClass {
         typealias StringIntToString = (String, Int) -> (String)
         typealias StringsToInt = (String, String) -> (Int)
+        typealias StringsToNonDefaultConstructibleThing = (String, String) -> (NonDefaultConstructibleThing)
 
         var stringIntToString : StringIntToString!
         var stringsToInt : StringsToInt!
+        var stringsToNonDefaultConstructibleThing : StringsToNonDefaultConstructibleThing!
 
         init(stringIntToString : StringIntToString) {
             self.stringIntToString = stringIntToString
@@ -17,12 +19,20 @@ class Lilliput2ArgumentTests: XCTestCase {
             self.stringsToInt = stringsToInt
         }
 
+        init(stringsToNonDefaultConstructibleThing : StringsToNonDefaultConstructibleThing) {
+            self.stringsToNonDefaultConstructibleThing = stringsToNonDefaultConstructibleThing
+        }
+
         func useStringIntToString(lhs: String, _ rhs: Int) -> String {
             return self.stringIntToString(lhs, rhs)
         }
 
         func useStringsToInt(lhs: String, _ rhs: String) -> Int {
             return self.stringsToInt(lhs, rhs)
+        }
+
+        func useStringsToNonDefaultConstructibleThing(lhs: String, _ rhs: String) -> NonDefaultConstructibleThing {
+            return self.stringsToNonDefaultConstructibleThing(lhs, rhs)
         }
     }
 
@@ -57,8 +67,8 @@ class Lilliput2ArgumentTests: XCTestCase {
     }
 
     func test_mockBuilder_withNonDefaultConstructibleReturn_createsMockWithNoMatchers() {
-        let aMock = mock(String.self, Int.self).returning(Int).orElse(3)
-        XCTAssertEqual(unbox(aMock)("foo", 2), 3)
+        let aMock = mock(String.self, Int.self).returning(NonDefaultConstructibleThing).orElse(NonDefaultConstructibleThing(3))
+        XCTAssertEqual(unbox(aMock)("foo", 2).int, 3)
     }
 
     func test_mockCreatedWithMockBuilder_canAddMatchers() {
@@ -69,10 +79,10 @@ class Lilliput2ArgumentTests: XCTestCase {
     }
 
     func test_mockCreatedWithMockBuilder_withNonDefaultConstructibleReturn_canAddMatchers() {
-        let aMock = mock(String.self, Int.self).returning(Int).orElse(13)
-        aMock.when("Foo", 2).then(14)
+        let aMock = mock(String.self, Int.self).returning(NonDefaultConstructibleThing).orElse(NonDefaultConstructibleThing(13))
+        aMock.when("Foo", 2).then(NonDefaultConstructibleThing(14))
         let result = unbox(aMock)("Foo", 2)
-        XCTAssertEqual(result, 14)
+        XCTAssertEqual(result.int, 14)
     }
 
     func test_any() {
@@ -122,16 +132,16 @@ class Lilliput2ArgumentTests: XCTestCase {
     // ReturnType tests
 
     func test_returnType_canBeNotDefaultConstructible_ifDefaultIsProvided() {
-        let mockStringsToInt = when("foo", "bar").then(1).orElse(2)
+        let mockStringsToNonDefaultConstructibleThing = when("foo", "bar").then(NonDefaultConstructibleThing(1)).orElse(NonDefaultConstructibleThing(2))
 
-        let testObject = TestClass(stringsToInt: unbox(mockStringsToInt))
+        let testObject = TestClass(stringsToNonDefaultConstructibleThing: unbox(mockStringsToNonDefaultConstructibleThing))
 
-        let fooBarResult = testObject.useStringsToInt("foo", "bar")
-        let defaultResult = testObject.useStringsToInt("foo", "NOT BAR")
+        let fooBarResult = testObject.useStringsToNonDefaultConstructibleThing("foo", "bar")
+        let defaultResult = testObject.useStringsToNonDefaultConstructibleThing("foo", "NOT BAR")
 
-        verifyAtLeastOnce(mockStringsToInt)
-        XCTAssertEqual(fooBarResult, 1)
-        XCTAssertEqual(defaultResult, 2)
+        verifyAtLeastOnce(mockStringsToNonDefaultConstructibleThing)
+        XCTAssertEqual(fooBarResult.int, 1)
+        XCTAssertEqual(defaultResult.int, 2)
     }
 
     func test_returnType_canHaveDefaultSet_evenIfReturnTypeIsDefaultConstructible() {
