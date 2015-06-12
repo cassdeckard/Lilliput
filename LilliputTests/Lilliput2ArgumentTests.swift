@@ -61,6 +61,20 @@ class Lilliput2ArgumentTests: XCTestCase {
         XCTAssertEqual(unbox(aMock)("foo", 2), 3)
     }
 
+    func test_mockCreatedWithMockBuilder_canAddMatchers() {
+        let aMock = mock(String.self, Int.self).returning(String)
+        aMock.when("Foo", 2).then("HI")
+        let result = unbox(aMock)("Foo", 2)
+        XCTAssertEqual(result, "HI")
+    }
+
+    func test_mockCreatedWithMockBuilder_withNonDefaultConstructibleReturn_canAddMatchers() {
+        let aMock = mock(String.self, Int.self).returning(Int).orElse(13)
+        aMock.when("Foo", 2).then(14)
+        let result = unbox(aMock)("Foo", 2)
+        XCTAssertEqual(result, 14)
+    }
+
     func test_any() {
         let mockStringIntToString = when("foo", 2).then("bar")
         mockStringIntToString.when("foo", any(Int)).then("baz")

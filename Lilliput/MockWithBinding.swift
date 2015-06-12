@@ -10,12 +10,10 @@ class MockWithBinding<A: Equatable, B: Equatable, ReturnType> {
         self.mock = mock
     }
 
-    func then<ReturnType>(returnValue: ReturnType) -> MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
-        if let mock = self.mock as? MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
-            mock.addBinding(binding: binding, returnValue: returnValue)
-            return mock
-        }
-        return MockFunctionWithoutDefaultReturn<A, B, ReturnType>(testCase: binding.testCase, bindings: [(binding, returnValue)])
+    func then<ReturnType>(returnValue: ReturnType) -> MockFunction<A, B, ReturnType> {
+        let mockFunction = self.mock as! MockFunction<A, B, ReturnType>
+        mockFunction.addBinding(binding: binding, returnValue: returnValue)
+        return mockFunction
     }
 
     func then<ReturnType>(returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
