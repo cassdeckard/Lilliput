@@ -16,6 +16,7 @@
 		E0ABC5231B2B077100AAC029 /* NoArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC5211B2B075000AAC029 /* NoArgument.swift */; };
 		E0ABC5251B2B07A200AAC029 /* ArgumentBinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC5241B2B07A200AAC029 /* ArgumentBinder.swift */; };
 		E0ABC5271B2B07E700AAC029 /* AnyArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC5261B2B07E700AAC029 /* AnyArgument.swift */; };
+		E0ABC5291B2B082700AAC029 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ABC5281B2B082700AAC029 /* Binding.swift */; };
 		E0ACD8A01B06ED1700AAFD73 /* Lilliput.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACD89F1B06ED1700AAFD73 /* Lilliput.swift */; };
 		E0AF77921B07C4830000A80C /* Lilliput2ArgumentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AF77911B07C4830000A80C /* Lilliput2ArgumentTests.swift */; };
 /* End PBXBuildFile section */
@@ -43,6 +44,7 @@
 		E0ABC5211B2B075000AAC029 /* NoArgument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoArgument.swift; sourceTree = "<group>"; };
 		E0ABC5241B2B07A200AAC029 /* ArgumentBinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArgumentBinder.swift; sourceTree = "<group>"; };
 		E0ABC5261B2B07E700AAC029 /* AnyArgument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyArgument.swift; sourceTree = "<group>"; };
+		E0ABC5281B2B082700AAC029 /* Binding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		E0ACD89F1B06ED1700AAFD73 /* Lilliput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lilliput.swift; sourceTree = "<group>"; };
 		E0AF77911B07C4830000A80C /* Lilliput2ArgumentTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lilliput2ArgumentTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -90,6 +92,7 @@
 				5A487C6A1AF280FB0002908D /* Lilliput.h */,
 				E0ACD89F1B06ED1700AAFD73 /* Lilliput.swift */,
 				E0ABC5261B2B07E700AAC029 /* AnyArgument.swift */,
+				E0ABC5281B2B082700AAC029 /* Binding.swift */,
 				E0ABC5241B2B07A200AAC029 /* ArgumentBinder.swift */,
 				E04FE0071B068DA9003A6ED6 /* DefaultConstructible.swift */,
 				E0ABC5211B2B075000AAC029 /* NoArgument.swift */,
@@ -250,6 +253,7 @@
 				5A487C781AF280FB0002908D /* Lilliput1ArgumentTests.swift in Sources */,
 				E0ABC5251B2B07A200AAC029 /* ArgumentBinder.swift in Sources */,
 				E04FE0081B068DA9003A6ED6 /* DefaultConstructible.swift in Sources */,
+				E0ABC5291B2B082700AAC029 /* Binding.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
