@@ -95,7 +95,7 @@ class Lilliput1ArgumentTests: XCTestCase {
 
     func test_capture() {
         let captureString = capture(String)
-        let mockStringToInt = mock(String.self).returning(Int).orElse(0)
+        let mockStringToInt = mock(String.self).returning(Int)
         mockStringToInt.when(captureString).then(12)
 
         let result = unbox(mockStringToInt)("foo")

@@ -94,7 +94,7 @@ class Lilliput2ArgumentTests: XCTestCase {
 
     func test_basic_capture() {
         let captureString = capture(String)
-        let mockStringsToInt = mock(String.self, String.self).returning(Int).orElse(0)
+        let mockStringsToInt = mock(String.self, String.self).returning(Int)
         mockStringsToInt.when(captureString, "bar").then(12)
 
         let result = unbox(mockStringsToInt)("foo", "bar")
@@ -109,7 +109,7 @@ class Lilliput2ArgumentTests: XCTestCase {
 
     func test_captureArgument_isOnlyCaptured_whenOtherArgumentsMatch() {
         let captureString = capture(String)
-        let mockStringsToInt = mock(String.self, String.self).returning(Int).orElse(0)
+        let mockStringsToInt = mock(String.self, String.self).returning(Int)
         mockStringsToInt.when(captureString, "bar").then(12)
 
         let result = unbox(mockStringsToInt)("foo", "BAR")
