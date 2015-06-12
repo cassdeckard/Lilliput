@@ -2,13 +2,6 @@ import Foundation
 import XCTest
 
 extension XCTestCase {
-    func mock<A: Equatable, B: Equatable>(a: A.Type, _ b: B.Type) -> MockBuilder<A, B> {
-        return MockBuilder<A, B>(testCase: self)
-    }
-
-    func mock<A: Equatable>(a: A.Type) -> MockBuilder<A, NoArgument> {
-        return MockBuilder<A, NoArgument>(testCase: self)
-    }
 
     func when<A: Equatable, B: Equatable>(argA: A, _ argB: B) -> Binding<A, B> {
         return Binding(testCase: self, argA, argB)

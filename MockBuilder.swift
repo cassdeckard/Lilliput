@@ -17,3 +17,13 @@ class MockBuilder<A: Equatable, B: Equatable> {
         return MockFunctionWithoutDefaultReturn<A, B, ReturnType>(testCase: self.testCase)
     }
 }
+
+extension XCTestCase {
+    func mock<A: Equatable, B: Equatable>(a: A.Type, _ b: B.Type) -> MockBuilder<A, B> {
+        return MockBuilder<A, B>(testCase: self)
+    }
+
+    func mock<A: Equatable>(a: A.Type) -> MockBuilder<A, NoArgument> {
+        return MockBuilder<A, NoArgument>(testCase: self)
+    }
+}
