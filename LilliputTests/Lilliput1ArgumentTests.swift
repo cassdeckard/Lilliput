@@ -72,24 +72,24 @@ class Lilliput1ArgumentTests: XCTestCase {
     }
 
     func test_mockBuilder_createsMockWithNoMatchers() {
-        let aMock = mock(String).returning(String)
+        let aMock = mock(String.self).returning(String.self)
         XCTAssertEqual(unbox(aMock)("foo"), "")
     }
 
     func test_mockBuilder_withNonDefaultConstructibleReturn_createsMockWithNoMatchers() {
-        let aMock = mock(String).returning(NonDefaultConstructibleThing).orElse(NonDefaultConstructibleThing(24))
+        let aMock = mock(String.self).returning(NonDefaultConstructibleThing.self).orElse(NonDefaultConstructibleThing(24))
         XCTAssertEqual(unbox(aMock)("foo").int, 24)
     }
 
     func test_mockCreatedWithMockBuilder_canAddMatchers() {
-        let aMock = mock(String.self).returning(String)
+        let aMock = mock(String.self).returning(String.self)
         aMock.when("Foo").then("HI")
         let result = unbox(aMock)("Foo")
         XCTAssertEqual(result, "HI")
     }
 
     func test_mockCreatedWithMockBuilder_withNonDefaultConstructibleReturn_canAddMatchers() {
-        let aMock = mock(Int.self).returning(NonDefaultConstructibleThing).orElse(NonDefaultConstructibleThing(13))
+        let aMock = mock(Int.self).returning(NonDefaultConstructibleThing.self).orElse(NonDefaultConstructibleThing(13))
         aMock.when(2).then(NonDefaultConstructibleThing(14))
 
         let result = unbox(aMock)(2)
@@ -97,9 +97,9 @@ class Lilliput1ArgumentTests: XCTestCase {
     }
 
     func test_any() {
-        let mockStringFilter = mock(String).returning(String)
+        let mockStringFilter = mock(String.self).returning(String.self)
         mockStringFilter.when("foo").then("bar")
-        mockStringFilter.when(any(String)).then("baz")
+        mockStringFilter.when(any(String.self)).then("baz")
         let testObject = TestClass(stringFilter: unbox(mockStringFilter))
 
         let result1 = testObject.useStringFilter("foo")
@@ -113,8 +113,8 @@ class Lilliput1ArgumentTests: XCTestCase {
     // Capturing
 
     func test_capture() {
-        let captureString = capture(String)
-        let mockStringToInt = mock(String.self).returning(Int)
+        let captureString = capture(String.self)
+        let mockStringToInt = mock(String.self).returning(Int.self)
         mockStringToInt.when(captureString).then(12)
 
         let result = unbox(mockStringToInt)("foo")

@@ -62,24 +62,24 @@ class Lilliput2ArgumentTests: XCTestCase {
     }
 
     func test_mockBuilder_createsMockWithNoMatchers() {
-        let aMock = mock(String.self, String.self).returning(String)
+        let aMock = mock(String.self, String.self).returning(String.self)
         XCTAssertEqual(unbox(aMock)("foo", "bar"), "")
     }
 
     func test_mockBuilder_withNonDefaultConstructibleReturn_createsMockWithNoMatchers() {
-        let aMock = mock(String.self, Int.self).returning(NonDefaultConstructibleThing).orElse(NonDefaultConstructibleThing(3))
+        let aMock = mock(String.self, Int.self).returning(NonDefaultConstructibleThing.self).orElse(NonDefaultConstructibleThing(3))
         XCTAssertEqual(unbox(aMock)("foo", 2).int, 3)
     }
 
     func test_mockCreatedWithMockBuilder_canAddMatchers() {
-        let aMock = mock(String.self, Int.self).returning(String)
+        let aMock = mock(String.self, Int.self).returning(String.self)
         aMock.when("Foo", 2).then("HI")
         let result = unbox(aMock)("Foo", 2)
         XCTAssertEqual(result, "HI")
     }
 
     func test_mockCreatedWithMockBuilder_withNonDefaultConstructibleReturn_canAddMatchers() {
-        let aMock = mock(String.self, Int.self).returning(NonDefaultConstructibleThing).orElse(NonDefaultConstructibleThing(13))
+        let aMock = mock(String.self, Int.self).returning(NonDefaultConstructibleThing.self).orElse(NonDefaultConstructibleThing(13))
         aMock.when("Foo", 2).then(NonDefaultConstructibleThing(14))
         let result = unbox(aMock)("Foo", 2)
         XCTAssertEqual(result.int, 14)
@@ -87,7 +87,7 @@ class Lilliput2ArgumentTests: XCTestCase {
 
     func test_any() {
         let mockStringIntToString = when("foo", 2).then("bar")
-        mockStringIntToString.when("foo", any(Int)).then("baz")
+        mockStringIntToString.when("foo", any(Int.self)).then("baz")
         let testObject = TestClass(stringIntToString: unbox(mockStringIntToString))
 
         let result1 = testObject.useStringIntToString("foo", 2)
@@ -103,8 +103,8 @@ class Lilliput2ArgumentTests: XCTestCase {
     // Capturing
 
     func test_basic_capture() {
-        let captureString = capture(String)
-        let mockStringsToInt = mock(String.self, String.self).returning(Int)
+        let captureString = capture(String.self)
+        let mockStringsToInt = mock(String.self, String.self).returning(Int.self)
         mockStringsToInt.when(captureString, "bar").then(12)
 
         let result = unbox(mockStringsToInt)("foo", "bar")
@@ -118,8 +118,8 @@ class Lilliput2ArgumentTests: XCTestCase {
     }
 
     func test_captureArgument_isOnlyCaptured_whenOtherArgumentsMatch() {
-        let captureString = capture(String)
-        let mockStringsToInt = mock(String.self, String.self).returning(Int)
+        let captureString = capture(String.self)
+        let mockStringsToInt = mock(String.self, String.self).returning(Int.self)
         mockStringsToInt.when(captureString, "bar").then(12)
 
         let result = unbox(mockStringsToInt)("foo", "BAR")
