@@ -19,27 +19,27 @@ class Lilliput1ArgumentTests: XCTestCase {
         var stringToInt : StringToInt!
         var stringToNonDefaultConstructibleThing : StringToNonDefaultConstructibleThing!
 
-        init(stringFilter : StringFilter) {
+        init(stringFilter : @escaping StringFilter) {
             self.stringFilter = stringFilter
         }
 
-        init(stringToInt : StringToInt) {
+        init(stringToInt : @escaping StringToInt) {
             self.stringToInt = stringToInt
         }
 
-        init(stringToNonDefaultConstructibleThing : StringToNonDefaultConstructibleThing) {
+        init(stringToNonDefaultConstructibleThing : @escaping StringToNonDefaultConstructibleThing) {
             self.stringToNonDefaultConstructibleThing = stringToNonDefaultConstructibleThing
         }
 
-        func useStringFilter(inString: String) -> String {
+        func useStringFilter(_ inString: String) -> String {
             return self.stringFilter(inString)
         }
 
-        func useStringToInt(inString: String) -> Int {
+        func useStringToInt(_ inString: String) -> Int {
             return self.stringToInt(inString)
         }
 
-        func useStringToNonDefaultConstructibleThing(inString: String) -> NonDefaultConstructibleThing {
+        func useStringToNonDefaultConstructibleThing(_ inString: String) -> NonDefaultConstructibleThing {
             return self.stringToNonDefaultConstructibleThing(inString)
         }
     }

@@ -3,12 +3,11 @@ import Foundation
 extension Array : DefaultConstructible {}
 extension AutoreleasingUnsafeMutablePointer : DefaultConstructible {}
 extension Bool : DefaultConstructible {}
-extension COpaquePointer : DefaultConstructible {}
 extension ContiguousArray : DefaultConstructible {}
 extension Dictionary : DefaultConstructible {}
 extension Double : DefaultConstructible {}
 extension EmptyCollection : DefaultConstructible {}
-extension EmptyGenerator : DefaultConstructible {}
+extension EmptyIterator : DefaultConstructible {}
 extension Float : DefaultConstructible {}
 extension Float80 : DefaultConstructible {}
 extension Int : DefaultConstructible {}

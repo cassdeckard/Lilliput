@@ -11,27 +11,27 @@ class Lilliput2ArgumentTests: XCTestCase {
         var stringsToInt : StringsToInt!
         var stringsToNonDefaultConstructibleThing : StringsToNonDefaultConstructibleThing!
 
-        init(stringIntToString : StringIntToString) {
+        init(stringIntToString : @escaping StringIntToString) {
             self.stringIntToString = stringIntToString
         }
 
-        init(stringsToInt : StringsToInt) {
+        init(stringsToInt : @escaping StringsToInt) {
             self.stringsToInt = stringsToInt
         }
 
-        init(stringsToNonDefaultConstructibleThing : StringsToNonDefaultConstructibleThing) {
+        init(stringsToNonDefaultConstructibleThing : @escaping StringsToNonDefaultConstructibleThing) {
             self.stringsToNonDefaultConstructibleThing = stringsToNonDefaultConstructibleThing
         }
 
-        func useStringIntToString(lhs: String, _ rhs: Int) -> String {
+        func useStringIntToString(_ lhs: String, _ rhs: Int) -> String {
             return self.stringIntToString(lhs, rhs)
         }
 
-        func useStringsToInt(lhs: String, _ rhs: String) -> Int {
+        func useStringsToInt(_ lhs: String, _ rhs: String) -> Int {
             return self.stringsToInt(lhs, rhs)
         }
 
-        func useStringsToNonDefaultConstructibleThing(lhs: String, _ rhs: String) -> NonDefaultConstructibleThing {
+        func useStringsToNonDefaultConstructibleThing(_ lhs: String, _ rhs: String) -> NonDefaultConstructibleThing {
             return self.stringsToNonDefaultConstructibleThing(lhs, rhs)
         }
     }

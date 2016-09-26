@@ -17,7 +17,7 @@ class _MockFunction<A: Equatable, B: Equatable, ReturnType>: Mock {
         self.bindings = bindings
     }
 
-    func addBinding(binding binding: TBinding, returnValue: ReturnType) {
+    func addBinding(binding: TBinding, returnValue: ReturnType) {
         self.bindings.append((binding, returnValue))
     }
 }
@@ -31,12 +31,12 @@ class MockFunction<A: Equatable, B:Equatable, ReturnType>: _MockFunction<A, B, R
         super.init(testCase: testCase, bindings: bindings)
     }
 
-    func when(argA: Any, _ argB: Any) -> MockWithBinding<A, B, ReturnType> {
+    func when(_ argA: Any, _ argB: Any) -> MockWithBinding<A, B, ReturnType> {
         let newBinding = Binding<A, B>(testCase: self.testCase, argA, argB)
         return MockWithBinding(mock: self, binding: newBinding)
     }
 
-    func when(argA: Any) -> MockWithBinding<A, NoArgument, ReturnType> {
+    func when(_ argA: Any) -> MockWithBinding<A, NoArgument, ReturnType> {
         let newBinding = Binding<A, NoArgument>(testCase: self.testCase, argA, NoArgument())
         return MockWithBinding(mock: self, binding: newBinding)
     }
@@ -53,15 +53,15 @@ class MockFunctionWithoutDefaultReturn<A: Equatable, B: Equatable, ReturnType>: 
         super.init(testCase: testCase, bindings: bindings)
     }
 
-    func orElse(defaultReturn: ReturnType) -> MockFunction<A, B, ReturnType> {
+    func orElse(_ defaultReturn: ReturnType) -> MockFunction<A, B, ReturnType> {
         return MockFunction<A, B, ReturnType>(testCase: self.testCase, bindings: self.bindings, defaultReturn: defaultReturn)
     }
 }
 
 // MARK: Unboxing
 
-func _unbox<A: Equatable, B: Equatable, ReturnType>(mock: MockFunction<A, B, ReturnType>, argA: A, argB: B) -> ReturnType {
-    mock.invocationCount++
+func _unbox<A: Equatable, B: Equatable, ReturnType>(_ mock: MockFunction<A, B, ReturnType>, argA: A, argB: B) -> ReturnType {
+    mock.invocationCount += 1
     for (binding, returnValue) in mock.bindings {
         if binding.matches(argA, argB) {
             return returnValue
@@ -70,10 +70,10 @@ func _unbox<A: Equatable, B: Equatable, ReturnType>(mock: MockFunction<A, B, Ret
     return mock.defaultReturn
 }
 
-func unbox<A: Equatable, B: Equatable, ReturnType>(mock: MockFunction<A, B, ReturnType>) -> MockFunction<A, B, ReturnType>.Signature {
+func unbox<A: Equatable, B: Equatable, ReturnType>(_ mock: MockFunction<A, B, ReturnType>) -> MockFunction<A, B, ReturnType>.Signature {
     return { _unbox(mock, argA: $0, argB: $1) }
 }
 
-func unbox<A: Equatable, ReturnType>(mock: MockFunction<A, NoArgument, ReturnType>) -> MockFunction<A, NoArgument, ReturnType>.Signature_ {
+func unbox<A: Equatable, ReturnType>(_ mock: MockFunction<A, NoArgument, ReturnType>) -> MockFunction<A, NoArgument, ReturnType>.Signature_ {
     return { _unbox(mock, argA: $0, argB: NoArgument()) }
 }

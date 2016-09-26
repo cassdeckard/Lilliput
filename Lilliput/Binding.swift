@@ -6,7 +6,7 @@ class _Binding<A: Equatable> {
     let anySelf: AnyArgument<A>?
     let captureSelf: Capture<A>?
 
-    static func valueOrAnyOrCapture(a: Any) -> (ArgumentBinder<A>?, AnyArgument<A>?, Capture<A>?) {
+    static func valueOrAnyOrCapture(_ a: Any) -> (ArgumentBinder<A>?, AnyArgument<A>?, Capture<A>?) {
         var value: ArgumentBinder<A>? = nil
         var any: AnyArgument<A>? = nil
         var capture: Capture<A>? = nil
@@ -21,10 +21,10 @@ class _Binding<A: Equatable> {
     }
 
     init(_ a: Any) {
-        (realSelf, anySelf, captureSelf) = self.dynamicType.valueOrAnyOrCapture(a)
+        (realSelf, anySelf, captureSelf) = type(of: self).valueOrAnyOrCapture(a)
     }
 
-    func matches(a: A) -> Bool {
+    func matches(_ a: A) -> Bool {
         var result = false
         if let realSelf = realSelf {
             result = (realSelf.arg == a)
@@ -43,7 +43,7 @@ class _Binding<A: Equatable> {
         return realSelf != nil || anySelf != nil || captureSelf != nil
     }
 
-    func fullArgumentListMatches(matches: Bool) {
+    func fullArgumentListMatches(_ matches: Bool) {
         if let captureSelf = captureSelf {
             captureSelf._allowCapture = matches
         }
@@ -62,15 +62,15 @@ class Binding<A: Equatable, B: Equatable> {
         testCase.verifyBoundArgumentsAreValid(self)
     }
 
-    func then<ReturnType>(returnValue: ReturnType) -> MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
+    func then<ReturnType>(_ returnValue: ReturnType) -> MockFunctionWithoutDefaultReturn<A, B, ReturnType> {
         return MockFunctionWithoutDefaultReturn<A, B, ReturnType>(testCase: testCase, bindings: [(self, returnValue)])
     }
 
-    func then<ReturnType>(returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
+    func then<ReturnType: DefaultConstructible>(_ returnValue: ReturnType) -> MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType> {
         return MockFunctionUsingDefaultConstructorForReturn<A, B, ReturnType>(testCase: testCase, bindings: [(self, returnValue)])
     }
 
-    func matches(argA: A, _ argB: B) -> Bool {
+    func matches(_ argA: A, _ argB: B) -> Bool {
         let result = boundArgumentA.matches(argA) &&
             boundArgumentB.matches(argB)
         boundArgumentA.fullArgumentListMatches(result)
