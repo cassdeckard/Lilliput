@@ -2,29 +2,33 @@ import Foundation
 import XCTest
 
 class MockFunction<A: Equatable, R> {
-    let binding: Binding<A>
-    let returnValue: R
+    var boundResults = [BoundResult<A, R>]()
     let defaultValue: R
     
-    init(binding: Binding<A>, to returnValue: R, withDefault defaultValue: R) {
-        self.binding = binding
-        self.returnValue = returnValue
+    init(withDefaultValue defaultValue: R) {
         self.defaultValue = defaultValue
+    }
+    
+    func addBoundResult(_ newBoundResult: BoundResult<A, R>) {
+        boundResults.append(newBoundResult)
     }
     
     func unbox() -> (A) -> (R) {
         return {
-            if self.binding.matches($0) {
-                return self.returnValue
+            a in
+            let maybeResult: R? = self.boundResults.reduce(nil as R?) {
+                acc, next in
+                guard let resolved = acc else { return next.match(a) }
+                return resolved
             }
-            else {
-                return self.defaultValue
-            }
+            guard let result = maybeResult else { return self.defaultValue }
+            return result
         }
     }
 }
 
-class MockFunctionWithoutDefault<A: Equatable, R> {
+class BoundResult<A: Equatable, R> {
+    
     let binding: Binding<A>
     let returnValue: R
     
@@ -34,7 +38,16 @@ class MockFunctionWithoutDefault<A: Equatable, R> {
     }
     
     func `else`(_ defaultValue: R) -> MockFunction<A, R> {
-        return MockFunction(binding: self.binding, to: returnValue, withDefault: defaultValue)
+        let mockFunction: MockFunction<A, R> = MockFunction(withDefaultValue: defaultValue)
+        mockFunction.addBoundResult(self)
+        return mockFunction
+    }
+    
+    func match(_ argA: A) -> R? {
+        if binding.matches(argA) {
+            return returnValue
+        }
+        return nil
     }
 }
 
@@ -45,8 +58,8 @@ class Binding<A: Equatable>: NSObject {
         self.argA = argA
     }
     
-    func then<R>(_ returnValue: R) -> MockFunctionWithoutDefault<A, R> {
-        return MockFunctionWithoutDefault(binding: self, to: returnValue)
+    func then<R>(_ returnValue: R) -> BoundResult<A, R> {
+        return BoundResult(binding: self, to: returnValue)
     }
     
     func matches(_ argA: A) -> Bool {
