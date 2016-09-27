@@ -2,15 +2,23 @@ import Foundation
 import XCTest
 
 class MockFunction<A: Equatable, R> {
-    var boundResults = [BoundResult<A, R>]()
+    typealias BoundResultType = BoundResult<A, R>
+
+    var boundResults = [BoundResultType]()
     let defaultValue: R
-    
+
     init(withDefaultValue defaultValue: R) {
         self.defaultValue = defaultValue
+        
     }
     
-    func addBoundResult(_ newBoundResult: BoundResult<A, R>) {
+    func addBoundResult(_ newBoundResult: BoundResultType) {
         boundResults.append(newBoundResult)
+    }
+    
+    func when(_ argA: A) -> Binding<A> {
+        let tc: XCTestCase = boundResults.first!.binding.testCase // TODO make better
+        return NewBinding(testCase: tc, target: self, argA)
     }
     
     func unbox() -> (A) -> (R) {
@@ -51,10 +59,29 @@ class BoundResult<A: Equatable, R> {
     }
 }
 
+class NewBinding<A: Equatable, R>: Binding<A> {
+    typealias TargetType = MockFunction<A, R>
+    let target: TargetType
+    
+    init(testCase: XCTestCase, target: TargetType, _ argA: A) {
+        self.target = target
+        super.init(testCase: testCase, argA)
+    }
+
+    @discardableResult
+    override func then<R>(_ returnValue: R) -> BoundResult<A, R> {
+        let boundResult: BoundResult<A, R> = BoundResult(binding: self, to: returnValue)
+        target.addBoundResult(boundResult as! TargetType.BoundResultType) // Warning is bogus, ignore
+        return boundResult
+    }
+}
+
 class Binding<A: Equatable>: NSObject {
+    let testCase: XCTestCase
     let argA: A
     
     init(testCase: XCTestCase, _ argA: A) {
+        self.testCase = testCase
         self.argA = argA
     }
     
