@@ -10,6 +10,8 @@
 		5A919A421D9AC74300CFC15B /* Lilliput.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A919A381D9AC74300CFC15B /* Lilliput.framework */; };
 		5A919A471D9AC74300CFC15B /* LilliputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A919A461D9AC74300CFC15B /* LilliputTests.swift */; };
 		5A919A491D9AC74300CFC15B /* Lilliput.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A919A3B1D9AC74300CFC15B /* Lilliput.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5A919A541D9ACA7A00CFC15B /* XCTestCase+Lilliput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A919A521D9ACA2C00CFC15B /* XCTestCase+Lilliput.swift */; };
+		5A919A571D9ACACB00CFC15B /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A919A551D9ACA9000CFC15B /* Binding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +31,8 @@
 		5A919A411D9AC74300CFC15B /* LilliputTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LilliputTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A919A461D9AC74300CFC15B /* LilliputTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LilliputTests.swift; sourceTree = "<group>"; };
 		5A919A481D9AC74300CFC15B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A919A521D9ACA2C00CFC15B /* XCTestCase+Lilliput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Lilliput.swift"; sourceTree = "<group>"; };
+		5A919A551D9ACA9000CFC15B /* Binding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +77,8 @@
 			children = (
 				5A919A3B1D9AC74300CFC15B /* Lilliput.h */,
 				5A919A3C1D9AC74300CFC15B /* Info.plist */,
+				5A919A521D9ACA2C00CFC15B /* XCTestCase+Lilliput.swift */,
+				5A919A551D9ACA9000CFC15B /* Binding.swift */,
 			);
 			path = Lilliput;
 			sourceTree = "<group>";
@@ -148,6 +154,7 @@
 				TargetAttributes = {
 					5A919A371D9AC74300CFC15B = {
 						CreatedOnToolsVersion = 8.0;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
 					5A919A401D9AC74300CFC15B = {
@@ -204,6 +211,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A919A471D9AC74300CFC15B /* LilliputTests.swift in Sources */,
+				5A919A571D9ACACB00CFC15B /* Binding.swift in Sources */,
+				5A919A541D9ACA7A00CFC15B /* XCTestCase+Lilliput.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,6 +329,7 @@
 		5A919A4D1D9AC74300CFC15B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -331,6 +341,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.foobarian.Lilliput;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -338,6 +349,7 @@
 		5A919A4E1D9AC74300CFC15B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
