@@ -25,6 +25,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5A36AA5E1D9C092400B8659C /* SwiftBug-OverridingGenericFunction.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = "SwiftBug-OverridingGenericFunction.playground"; path = "Lilliput/SwiftBug-OverridingGenericFunction.playground"; sourceTree = "<group>"; };
 		5A919A381D9AC74300CFC15B /* Lilliput.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Lilliput.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A919A3B1D9AC74300CFC15B /* Lilliput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lilliput.h; sourceTree = "<group>"; };
 		5A919A3C1D9AC74300CFC15B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -58,6 +59,7 @@
 		5A919A2E1D9AC74300CFC15B = {
 			isa = PBXGroup;
 			children = (
+				5A36AA5E1D9C092400B8659C /* SwiftBug-OverridingGenericFunction.playground */,
 				5AEB23931D9B1DFA00803F0F /* SwiftBug-OverrideAndGenericTypes.playground */,
 				5A919A3A1D9AC74300CFC15B /* Lilliput */,
 				5A919A451D9AC74300CFC15B /* LilliputTests */,
