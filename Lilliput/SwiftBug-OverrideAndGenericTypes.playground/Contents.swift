@@ -2,18 +2,20 @@
 
 import UIKit
 
-class Bar<A, B>: NSObject {
+struct Bar<A, B> {
+    let a: A
+    let b: B
 
-    let myA: A
-    let myB: B
-
-    init(a: A, b: B) {
-        myA = a
-        myB = b
+    var description: String {
+        return "Bar(\(a), \(b))"
     }
+}
 
-    override var description: String {
-        return "Bar(\(myA), \(myB))"
+class BarEater<A, B> {
+    typealias FavoriteBar = Bar<A, B>
+
+    func giveBar(_ bar: FavoriteBar) {
+        print("yummy \(bar)")
     }
 }
 
@@ -29,16 +31,7 @@ class Foo<A> {
     }
 }
 
-class BarEater<S, T> {
-    typealias FavoriteBar = Bar<S, T>
-
-    func giveBar(_ bar: FavoriteBar) {
-        print("yummy \(bar)")
-    }
-}
-
 class SuperFoo<A, B> : Foo<A> {
-
     typealias MyBarEater = BarEater<A, B>
 
     let mybarEater: MyBarEater
@@ -50,10 +43,10 @@ class SuperFoo<A, B> : Foo<A> {
 
     override func getBar<B>(b: B) -> Bar<A, B> {
         let bar = Bar(a: myA, b: b)
-        mybarEater.giveBar(bar as! MyBarEater.FavoriteBar)
+        mybarEater.giveBar(bar as! MyBarEater.FavoriteBar) // "Cast from 'Bar<A, B>' to unrelated type 'Bar<A, B>' always fails"
         return bar
     }
 }
 
 let sf = SuperFoo(a: "there", barEater: BarEater<String, Int>())
-let sfb = sf.getBar(b: 4)
+let sfb = sf.getBar(b: 4) // Cast does not fail because "yummy Bar<String, Int>(a: "there", b: 4)" is printed
