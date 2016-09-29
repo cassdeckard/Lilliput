@@ -1,18 +1,18 @@
 import Foundation
 import XCTest
 
-class BoundResult<A: Equatable, R> {
-    
-    let binding: Binding<A>
+class BoundResult<B: BindingType, R> {
+    typealias A = B.ArgumentType
+    let binding: B
     let returnValue: R
     
-    init(binding: Binding<A>, to returnValue: R) {
+    init(binding: B, to returnValue: R) {
         self.binding = binding
         self.returnValue = returnValue
     }
     
-    func `else`(_ defaultValue: R) -> MockFunction<A, R> {
-        let mockFunction: MockFunction<A, R> = MockFunction(withDefaultValue: defaultValue)
+    func `else`(_ defaultValue: R) -> MockFunction<B, R> {
+        let mockFunction: MockFunction<B, R> = MockFunction(withDefaultValue: defaultValue)
         mockFunction.addBoundResult(self)
         return mockFunction
     }

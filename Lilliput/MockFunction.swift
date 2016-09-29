@@ -1,8 +1,10 @@
 import Foundation
 import XCTest
 
-class MockFunction<A: Equatable, R> {
-    typealias BoundResultType = BoundResult<A, R>
+class MockFunction<B: BindingType, R> {
+    typealias A = B.ArgumentType
+    typealias Matcher = B.Matcher
+    typealias BoundResultType = BoundResult<B, R>
     
     var boundResults = [BoundResultType]()
     let defaultValue: R
@@ -16,10 +18,10 @@ class MockFunction<A: Equatable, R> {
         boundResults.append(newBoundResult)
     }
     
-    func when(_ argA: A) -> NewBinding<A, R> {
-        let tc: XCTestCase = boundResults.first!.binding.testCase // TODO make better
-        return NewBinding(testCase: tc, target: self, argA)
-    }
+//    func when(_ argA: A) -> NewBinding<A, R> {
+//        let tc: XCTestCase = boundResults.first!.binding.testCase // TODO make better
+//        return NewBinding(testCase: tc, target: self, argA)
+//    }
     
     func unbox() -> (A) -> (R) {
         return {
