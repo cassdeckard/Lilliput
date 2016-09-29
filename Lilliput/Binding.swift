@@ -23,7 +23,6 @@ class EqualsMatcher<T: Equatable> : MatcherType {
 
 protocol BindingType {
     associatedtype ArgumentType
-    associatedtype Matcher
     
     func matches(_ argA: ArgumentType) -> Bool
 }

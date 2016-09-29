@@ -3,7 +3,6 @@ import XCTest
 
 class MockFunction<B: BindingType, R> {
     typealias A = B.ArgumentType
-    typealias Matcher = B.Matcher
     typealias BoundResultType = BoundResult<B, R>
     
     var boundResults = [BoundResultType]()
