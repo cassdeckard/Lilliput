@@ -24,6 +24,8 @@ class EqualsMatcher<T: Equatable> : MatcherType {
 protocol BindingType {
     associatedtype ArgumentType
     
+    var testCase: XCTestCase { get }
+    
     func matches(_ argA: ArgumentType) -> Bool
 }
 
@@ -54,19 +56,31 @@ extension Binding where A: Equatable, M: EqualsMatcher<A> {
     }
 }
 
-//class NewBinding<A, M: MatcherType, R>: Binding<A, M> where M.ArgumentType == A {
-//    typealias TargetType = MockFunction<NewBinding, R>
-//    let target: TargetType
-//    
-//    init(testCase: XCTestCase, target: TargetType, _ argA: A) {
-//        self.target = target
-//        super.init(testCase: testCase, matcher: argA)
-//    }
-//    
+class NewBinding<A, M: MatcherType, MF: MockFunctionType>: Binding<A, M> where M.ArgumentType == A {
+    typealias R = MF.ResultType
+    let target: MF
+    
+    init(testCase: XCTestCase, target: MF, matcher: Matcher) {
+        self.target = target
+        super.init(testCase: testCase, matcher: matcher)
+    }
+    
+    override func then<R>(_ returnValue: R) -> BoundResult<Binding<A, M>, R> {
+        let boundResult: MF.BoundResultType = BoundResult(binding: self, to: returnValue) as! MF.BoundResultType
+        target.addBoundResult(boundResult) // Warning is bogus, ignore
+        return boundResult as! BoundResult<Binding<A, M>, R>
+    }
+//
 //    @discardableResult
 //    override func then<R>(_ returnValue: R) -> BoundResult<NewBinding, R> {
 //        let boundResult: BoundResult<NewBinding, R> = BoundResult(binding: self, to: returnValue)
 //        target.addBoundResult(boundResult as! TargetType.BoundResultType) // Warning is bogus, ignore
 //        return boundResult
 //    }
-//}
+}
+
+extension NewBinding where A: Equatable, M: EqualsMatcher<A> {
+    static func create(testCase: XCTestCase, target: MF, _ argA: A) -> NewBinding<A, M, MF> {
+        return NewBinding(testCase: testCase, target: target, matcher: EqualsMatcher<A>(argA) as! M)
+    }
+}

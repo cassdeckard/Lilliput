@@ -19,16 +19,16 @@ class LilliputTests: XCTestCase {
         XCTAssertEqual(callable("FOUX"), "baz")
     }
     
-//    func test_addBindings() {
-//        let mock_String👉String = when("foo").then("bar").else("baz")
-//        mock_String👉String.when("awesome").then("good job")
-//        
-//        let callable: (String) -> (String) = mock_String👉String.unbox()
-//        
-//        XCTAssertEqual(callable("foo"), "bar")
-//        XCTAssertEqual(callable("awesome"), "good job")
-//        XCTAssertEqual(callable("errrm"), "baz")
-//    }
+    func test_addBindings() {
+        let mock_String👉String = when("foo").then("bar").else("baz")
+        mock_String👉String.when("awesome").then("good job")
+        
+        let callable: (String) -> (String) = mock_String👉String.unbox()
+        
+        XCTAssertEqual(callable("foo"), "bar")
+        XCTAssertEqual(callable("awesome"), "good job")
+        XCTAssertEqual(callable("errrm"), "baz")
+    }
     
     // TODO: multiple arguments
     
