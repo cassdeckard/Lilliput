@@ -28,4 +28,14 @@ class LilliputTests: XCTestCase {
         XCTAssertEqual(callable("awesome"), "good job")
         XCTAssertEqual(callable("errrm"), "baz")
     }
+    
+    // TODO: multiple arguments
+    
+    // TODO: matchers
+    
+    // TODO: record arguments
+    
+    // TODO: capture arguments
+    
+    // TODO: closure for results
 }
