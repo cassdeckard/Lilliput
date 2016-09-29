@@ -48,6 +48,12 @@ class Binding<A, M: MatcherType>: BindingType where M.ArgumentType == A {
     }
 }
 
+extension Binding where A: Equatable, M: EqualsMatcher<A> {
+    static func create(testCase: XCTestCase, _ argA: A) -> Binding<A, M> {
+        return Binding(testCase: testCase, matcher: EqualsMatcher<A>(argA) as! M)
+    }
+}
+
 //class NewBinding<A, M: MatcherType, R>: Binding<A, M> where M.ArgumentType == A {
 //    typealias TargetType = MockFunction<NewBinding, R>
 //    let target: TargetType
