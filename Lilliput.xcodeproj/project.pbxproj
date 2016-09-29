@@ -12,6 +12,8 @@
 		5A919A491D9AC74300CFC15B /* Lilliput.h in Headers */ = {isa = PBXBuildFile; fileRef = 5A919A3B1D9AC74300CFC15B /* Lilliput.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5A919A541D9ACA7A00CFC15B /* XCTestCase+Lilliput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A919A521D9ACA2C00CFC15B /* XCTestCase+Lilliput.swift */; };
 		5A919A571D9ACACB00CFC15B /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A919A551D9ACA9000CFC15B /* Binding.swift */; };
+		E09FDBC01D9D572C0080ADC2 /* MockFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09FDBBE1D9D57030080ADC2 /* MockFunction.swift */; };
+		E09FDBC31D9D575E0080ADC2 /* BoundResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09FDBC11D9D57460080ADC2 /* BoundResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +37,8 @@
 		5A919A521D9ACA2C00CFC15B /* XCTestCase+Lilliput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Lilliput.swift"; sourceTree = "<group>"; };
 		5A919A551D9ACA9000CFC15B /* Binding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		5AEB23931D9B1DFA00803F0F /* SwiftBug-OverrideAndGenericTypes.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = "SwiftBug-OverrideAndGenericTypes.playground"; path = "Lilliput/SwiftBug-OverrideAndGenericTypes.playground"; sourceTree = "<group>"; };
+		E09FDBBE1D9D57030080ADC2 /* MockFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFunction.swift; sourceTree = "<group>"; };
+		E09FDBC11D9D57460080ADC2 /* BoundResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +87,8 @@
 				5A919A3C1D9AC74300CFC15B /* Info.plist */,
 				5A919A521D9ACA2C00CFC15B /* XCTestCase+Lilliput.swift */,
 				5A919A551D9ACA9000CFC15B /* Binding.swift */,
+				E09FDBC11D9D57460080ADC2 /* BoundResult.swift */,
+				E09FDBBE1D9D57030080ADC2 /* MockFunction.swift */,
 			);
 			path = Lilliput;
 			sourceTree = "<group>";
@@ -215,7 +221,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A919A471D9AC74300CFC15B /* LilliputTests.swift in Sources */,
+				E09FDBC01D9D572C0080ADC2 /* MockFunction.swift in Sources */,
 				5A919A571D9ACACB00CFC15B /* Binding.swift in Sources */,
+				E09FDBC31D9D575E0080ADC2 /* BoundResult.swift in Sources */,
 				5A919A541D9ACA7A00CFC15B /* XCTestCase+Lilliput.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
