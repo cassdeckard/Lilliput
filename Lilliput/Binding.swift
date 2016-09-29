@@ -16,7 +16,7 @@ class MockFunction<A: Equatable, R> {
         boundResults.append(newBoundResult)
     }
     
-    func when(_ argA: A) -> Binding<A> {
+    func when(_ argA: A) -> NewBinding<A, R> {
         let tc: XCTestCase = boundResults.first!.binding.testCase // TODO make better
         return NewBinding(testCase: tc, target: self, argA)
     }
