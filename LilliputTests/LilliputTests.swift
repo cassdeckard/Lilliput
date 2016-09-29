@@ -26,5 +26,6 @@ class LilliputTests: XCTestCase {
         
         XCTAssertEqual(callable("foo"), "bar")
         XCTAssertEqual(callable("awesome"), "good job")
+        XCTAssertEqual(callable("errrm"), "baz")
     }
 }
