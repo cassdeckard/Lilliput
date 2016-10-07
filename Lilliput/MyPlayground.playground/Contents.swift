@@ -4,17 +4,22 @@ import UIKit
 
 var str = "Hello, playground"
 
+prefix operator *
 
 struct Mock<M: Matcher, R> {
     typealias Binding = (matcher: M, result: R)
     var bindings = [Binding]()
 
-    func match(_ a1: M.Arg1) -> R? {
+    private func match(_ a1: M.Arg1) -> R? {
         return bindings.filter {
             $0.matcher.matches(a1)
         }.map {
             $0.result
         }.first
+    }
+
+    static prefix func * (mock: Mock) -> (M.Arg1) -> R? {
+        return mock.match
     }
 }
 
@@ -74,11 +79,11 @@ func when<A1>(_ a1: A1) -> BoundArgumentMatcher<A1> {
 //=========================================
 
 var mock1 = when(2).then("bar")
-mock1.match(1)
-mock1.match(2)
+var mock1Func = *mock1
+mock1Func(1)
+mock1Func(2)
 
 var mock2 = when{ $0 < 3 }.then("foo")
-mock2.match(1)
-mock2.match(2)
-mock2.match(3)
-mock2.match(4)
+var mock2Func = *mock2
+mock2Func(2)
+mock2Func(3)
