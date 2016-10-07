@@ -6,11 +6,12 @@ var str = "Hello, playground"
 
 prefix operator *
 
-class Mock<M: Matcher, R> {
-    typealias Binding = (matcher: M, result: R)
+class Mock<A1, R> {
+    typealias Matcher = AnyMatcher<A1>
+    typealias Binding = (matcher: AnyMatcher<A1>, result: R)
     var bindings = [Binding]()
 
-    private func match(_ a1: M.Arg1) -> R? {
+    private func match(_ a1: A1) -> R? {
         return bindings.filter {
             $0.matcher.matches(a1)
         }.map {
@@ -18,7 +19,7 @@ class Mock<M: Matcher, R> {
         }.first
     }
 
-    static prefix func * (mock: Mock) -> (M.Arg1) -> R? {
+    static prefix func * (mock: Mock) -> (A1) -> R? {
         return mock.match
     }
 }
@@ -30,12 +31,31 @@ protocol Matcher {
 }
 
 extension Matcher {
-    internal func then<R>(_ r: R) -> Mock<Self, R> {
-        let mock = Mock<Self, R>()
-        mock.bindings.append((matcher: self, result: r))
+    internal func then<R>(_ r: R) -> Mock<Arg1, R> {
+        let mock = Mock<Arg1, R>()
+        mock.bindings.append((matcher: AnyMatcher(self), result: r))
         return mock
     }
 }
+
+//=========================================
+
+struct AnyMatcher<A1>: Matcher {
+    private let _match: (A1) -> Bool
+
+    typealias Arg1 = A1
+
+    init<M: Matcher>(_ matcher: M) where M.Arg1 == Arg1 {
+        _match = {
+            matcher.matches($0)
+        }
+    }
+
+    internal func matches(_ a1: A1) -> Bool {
+        return _match(a1)
+    }
+}
+
 
 //=========================================
 
@@ -83,7 +103,7 @@ var mock1Func = *mock1
 mock1Func(1)
 mock1Func(2)
 
-mock1.bindings.append((matcher: BoundArgumentMatcher(a1: 3), result: "aowow"))
+mock1.bindings.append((matcher: AnyMatcher(BoundArgumentMatcher(a1: 3)), result: "aowow"))
 
 mock1Func(3)
 
@@ -91,3 +111,8 @@ var mock2 = when{ $0 < 3 }.then("foo")
 var mock2Func = *mock2
 mock2Func(2)
 mock2Func(3)
+
+
+mock2.bindings.append((matcher: AnyMatcher(BoundArgumentMatcher(a1: 6)), result: "aowow"))
+
+mock2Func(6)
