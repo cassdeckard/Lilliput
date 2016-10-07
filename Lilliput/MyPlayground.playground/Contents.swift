@@ -6,7 +6,7 @@ var str = "Hello, playground"
 
 prefix operator *
 
-struct Mock<M: Matcher, R> {
+class Mock<M: Matcher, R> {
     typealias Binding = (matcher: M, result: R)
     var bindings = [Binding]()
 
@@ -31,7 +31,7 @@ protocol Matcher {
 
 extension Matcher {
     internal func then<R>(_ r: R) -> Mock<Self, R> {
-        var mock = Mock<Self, R>()
+        let mock = Mock<Self, R>()
         mock.bindings.append((matcher: self, result: r))
         return mock
     }
@@ -82,6 +82,10 @@ var mock1 = when(2).then("bar")
 var mock1Func = *mock1
 mock1Func(1)
 mock1Func(2)
+
+mock1.bindings.append((matcher: BoundArgumentMatcher(a1: 3), result: "aowow"))
+
+mock1Func(3)
 
 var mock2 = when{ $0 < 3 }.then("foo")
 var mock2Func = *mock2
