@@ -25,6 +25,8 @@ protocol Matcher: Hashable {
     func matches(_ a1: Arg1) -> Bool
 }
 
+//=========================================
+
 struct BoundArgumentMatcher<A1: Hashable> {
     let a1: A1
 }
@@ -51,6 +53,8 @@ extension BoundArgumentMatcher: Matcher {
         return self.a1 == a1
     }
 }
+
+//=========================================
 
 func when<A1>(_ a1: A1) -> BoundArgumentMatcher<A1> {
     return BoundArgumentMatcher(a1: a1)
