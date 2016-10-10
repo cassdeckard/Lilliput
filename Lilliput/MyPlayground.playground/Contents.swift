@@ -38,6 +38,12 @@ extension Matcher {
     }
 }
 
+extension Mock where A1: Equatable {
+    func when(_ a1: A1) -> BoundArgumentMatcherWithTarget<A1, R> {
+        return BoundArgumentMatcherWithTarget(a1, target: self)
+    }
+}
+
 //=========================================
 
 struct AnyMatcher<A1>: Matcher {
@@ -59,8 +65,12 @@ struct AnyMatcher<A1>: Matcher {
 
 //=========================================
 
-struct BoundArgumentMatcher<A1: Equatable> {
+class BoundArgumentMatcher<A1: Equatable> {
     let a1: A1
+
+    init(_ a1: A1) {
+        self.a1 = a1
+    }
 }
 
 extension BoundArgumentMatcher: Matcher {
@@ -71,6 +81,31 @@ extension BoundArgumentMatcher: Matcher {
     }
 }
 
+
+//=========================================
+
+protocol MatcherWithTarget: Matcher {
+    associatedtype Return
+
+    var target: Mock<Arg1, Return> { get }
+}
+
+extension MatcherWithTarget {
+    internal func then(_ r: Return) -> Mock<Arg1, Return> {
+        let binding = (matcher: AnyMatcher(self), result: r)
+        target.bindings.append(binding)
+        return target
+    }
+}
+
+class BoundArgumentMatcherWithTarget<A1: Equatable, R>: BoundArgumentMatcher<A1>, MatcherWithTarget {
+    let target: Mock<A1, R>
+
+    init(_ a1: A1, target: Mock<A1, R>) {
+        self.target = target
+        super.init(a1)
+    }
+}
 
 //=========================================
 
@@ -93,7 +128,7 @@ func when<A1>(_ closure: @escaping (A1) -> Bool) -> ClosureMatcher<A1> {
 }
 
 func when<A1>(_ a1: A1) -> BoundArgumentMatcher<A1> {
-    return BoundArgumentMatcher(a1: a1)
+    return BoundArgumentMatcher(a1)
 }
 
 //=========================================
@@ -103,7 +138,7 @@ var mock1Func = *mock1
 mock1Func(1)
 mock1Func(2)
 
-mock1.bindings.append((matcher: AnyMatcher(BoundArgumentMatcher(a1: 3)), result: "aowow"))
+mock1.when(3).then("oooooooyeah")
 
 mock1Func(3)
 
@@ -112,7 +147,6 @@ var mock2Func = *mock2
 mock2Func(2)
 mock2Func(3)
 
-
-mock2.bindings.append((matcher: AnyMatcher(BoundArgumentMatcher(a1: 6)), result: "aowow"))
+mock2.when(6).then("sweet sassy molassey")
 
 mock2Func(6)
