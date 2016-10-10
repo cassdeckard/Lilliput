@@ -24,19 +24,6 @@ class Mock<A1, R> {
     }
 }
 
-protocol Matcher {
-    associatedtype Arg1
-
-    func matches(_ a1: Arg1) -> Bool
-}
-
-extension Matcher {
-    internal func then<R>(_ r: R) -> Mock<Arg1, R> {
-        let mock = Mock<Arg1, R>()
-        mock.bindings.append((matcher: AnyMatcher(self), result: r))
-        return mock
-    }
-}
 
 extension Mock where A1: Equatable {
     func when(_ a1: A1) -> BoundArgumentMatcherWithTarget<A1, R> {
@@ -65,6 +52,37 @@ struct AnyMatcher<A1>: Matcher {
 
 //=========================================
 
+protocol Matcher {
+    associatedtype Arg1
+
+    func matches(_ a1: Arg1) -> Bool
+}
+
+extension Matcher {
+    internal func then<R>(_ r: R) -> Mock<Arg1, R> {
+        let mock = Mock<Arg1, R>()
+        mock.bindings.append((matcher: AnyMatcher(self), result: r))
+        return mock
+    }
+}
+
+protocol MatcherWithTarget: Matcher {
+    associatedtype Return
+
+    var target: Mock<Arg1, Return> { get }
+}
+
+extension MatcherWithTarget {
+    internal func then(_ r: Return) -> Mock<Arg1, Return> {
+        let binding = (matcher: AnyMatcher(self), result: r)
+        target.bindings.append(binding)
+        return target
+    }
+}
+
+
+//=========================================
+
 class BoundArgumentMatcher<A1: Equatable> {
     let a1: A1
 
@@ -78,23 +96,6 @@ extension BoundArgumentMatcher: Matcher {
 
     internal func matches(_ a1: A1) -> Bool {
         return self.a1 == a1
-    }
-}
-
-
-//=========================================
-
-protocol MatcherWithTarget: Matcher {
-    associatedtype Return
-
-    var target: Mock<Arg1, Return> { get }
-}
-
-extension MatcherWithTarget {
-    internal func then(_ r: Return) -> Mock<Arg1, Return> {
-        let binding = (matcher: AnyMatcher(self), result: r)
-        target.bindings.append(binding)
-        return target
     }
 }
 
