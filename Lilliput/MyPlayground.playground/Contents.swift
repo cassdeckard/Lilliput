@@ -182,6 +182,14 @@ mock2Func(6)
 
 mock2.when{ $0 % 9 == 0 }.then("NOINE!")
 
-mock2Func(0)   // FIXME: what to do if multiple matchers match?
+mock2Func(0)   // NOTE: when multiple matchers match, the first wins
 mock2Func(18)
 mock2Func(8)
+
+// TODO: verify times
+
+// TODO: default returns
+
+// TODO: multiple arguments
+
+// TODO: any matcher
