@@ -6,6 +6,12 @@ var str = "Hello, playground"
 
 prefix operator *
 
+protocol DefaultConstructible {
+    init()
+}
+
+extension String: DefaultConstructible {}
+
 class Mock<A1, R> {
     typealias Matcher = AnyMatcher<A1>
     typealias Binding = (matcher: AnyMatcher<A1>, result: R)
@@ -30,6 +36,11 @@ class Mock<A1, R> {
     }
 }
 
+extension Mock where R: DefaultConstructible {
+    func elseDefault() {
+        defaultReturn = R()
+    }
+}
 
 extension Mock where A1: Equatable {
     func when(_ a1: A1) -> BoundArgumentMatcherWithTarget<A1, R> {
@@ -180,6 +191,9 @@ mock1Func(8)
 var mock2 = when{ $0 < 3 }.then("foo")
 var mock2Func = *mock2
 mock2Func(2)
+mock2Func(3)
+
+mock2.elseDefault()
 mock2Func(3)
 
 mock2.when(6).then("sweet sassy molassey").else("NOPERS")
