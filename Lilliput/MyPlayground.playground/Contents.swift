@@ -31,6 +31,12 @@ extension Mock where A1: Equatable {
     }
 }
 
+extension Mock {
+    func when(_ closure: @escaping ClosureMatcherWithTarget<A1, R>.Closure) -> ClosureMatcherWithTarget<A1, R> {
+        return ClosureMatcherWithTarget(closure, target: self)
+    }
+}
+
 //=========================================
 
 struct AnyMatcher<A1>: Matcher {
@@ -114,8 +120,12 @@ class BoundArgumentMatcherWithTarget<A1: Equatable, R>: BoundArgumentMatcher<A1>
 
 //=========================================
 
-struct ClosureMatcher<A1> {
+class ClosureMatcher<A1> {
     let closure: ClosureMatcher.Closure
+
+    init(_ closure: @escaping ClosureMatcher.Closure) {
+        self.closure = closure
+    }
 }
 
 extension ClosureMatcher: Matcher {
@@ -126,10 +136,19 @@ extension ClosureMatcher: Matcher {
     }
 }
 
+class ClosureMatcherWithTarget<A1, R>: ClosureMatcher<A1>, MatcherWithTarget {
+    let target: Mock<A1, R>
+
+    init(_ closure: @escaping ClosureMatcherWithTarget.Closure, target: Mock<A1, R>) {
+        self.target = target
+        super.init(closure)
+    }
+}
+
 //=========================================
 
 func when<A1>(_ closure: @escaping ClosureMatcher<A1>.Closure) -> ClosureMatcher<A1> {
-    return ClosureMatcher(closure: closure)
+    return ClosureMatcher(closure)
 }
 
 func when<A1>(_ a1: A1) -> BoundArgumentMatcher<A1> {
@@ -147,6 +166,11 @@ mock1.when(3).then("oooooooyeah")
 
 mock1Func(3)
 
+mock1.when{ $0 % 7 == 0 }.then("totes divisible by 7 yo")
+
+mock1Func(7)
+mock1Func(8)
+
 var mock2 = when{ $0 < 3 }.then("foo")
 var mock2Func = *mock2
 mock2Func(2)
@@ -155,3 +179,9 @@ mock2Func(3)
 mock2.when(6).then("sweet sassy molassey")
 
 mock2Func(6)
+
+mock2.when{ $0 % 9 == 0 }.then("NOINE!")
+
+mock2Func(0)   // FIXME: what to do if multiple matchers match?
+mock2Func(18)
+mock2Func(8)
