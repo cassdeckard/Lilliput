@@ -34,7 +34,7 @@ extension Mock where A1: Equatable {
 //=========================================
 
 struct AnyMatcher<A1>: Matcher {
-    private let _match: (A1) -> Bool
+    private let _match: AnyMatcher.Closure
 
     typealias Arg1 = A1
 
@@ -56,6 +56,10 @@ protocol Matcher {
     associatedtype Arg1
 
     func matches(_ a1: Arg1) -> Bool
+}
+
+extension Matcher {
+    typealias Closure = (Arg1) -> Bool
 }
 
 extension Matcher {
@@ -111,7 +115,7 @@ class BoundArgumentMatcherWithTarget<A1: Equatable, R>: BoundArgumentMatcher<A1>
 //=========================================
 
 struct ClosureMatcher<A1> {
-    let closure: (A1) -> Bool
+    let closure: ClosureMatcher.Closure
 }
 
 extension ClosureMatcher: Matcher {
@@ -124,7 +128,7 @@ extension ClosureMatcher: Matcher {
 
 //=========================================
 
-func when<A1>(_ closure: @escaping (A1) -> Bool) -> ClosureMatcher<A1> {
+func when<A1>(_ closure: @escaping ClosureMatcher<A1>.Closure) -> ClosureMatcher<A1> {
     return ClosureMatcher(closure: closure)
 }
 
