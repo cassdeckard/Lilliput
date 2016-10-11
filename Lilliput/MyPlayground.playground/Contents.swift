@@ -10,13 +10,19 @@ class Mock<A1, R> {
     typealias Matcher = AnyMatcher<A1>
     typealias Binding = (matcher: AnyMatcher<A1>, result: R)
     var bindings = [Binding]()
+    var defaultReturn: R?
 
     private func match(_ a1: A1) -> R? {
         return bindings.filter {
             $0.matcher.matches(a1)
         }.map {
             $0.result
-        }.first
+        }.first ?? defaultReturn
+    }
+
+    internal func `else`(_ r: R) -> Mock {
+        defaultReturn = r
+        return self
     }
 
     static prefix func * (mock: Mock) -> (A1) -> R? {
@@ -157,7 +163,7 @@ func when<A1>(_ a1: A1) -> BoundArgumentMatcher<A1> {
 
 //=========================================
 
-var mock1 = when(2).then("bar")
+var mock1 = when(2).then("bar").else("NO DICE")
 var mock1Func = *mock1
 mock1Func(1)
 mock1Func(2)
@@ -176,7 +182,7 @@ var mock2Func = *mock2
 mock2Func(2)
 mock2Func(3)
 
-mock2.when(6).then("sweet sassy molassey")
+mock2.when(6).then("sweet sassy molassey").else("NOPERS")
 
 mock2Func(6)
 
@@ -187,8 +193,6 @@ mock2Func(18)
 mock2Func(8)
 
 // TODO: verify times
-
-// TODO: default returns
 
 // TODO: multiple arguments
 
